@@ -5,4 +5,7 @@
     <string name="error_message_loading_users">There seems to have been some error.</string>
     <string name="default_message_loading_users">Loading</string>
     <string name="title_activity_scroll">ScrollActivity</string>
+
+    <string name="timer_time">%02d:%02d:%02d</string>
+    <string name="timer_finish_time">99:99:99</string>
 </resources>
