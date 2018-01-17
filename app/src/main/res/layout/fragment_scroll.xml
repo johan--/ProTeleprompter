@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.proteleprompter.ScrollActivityFragment"
-    tools:showIn="@layout/activity_scroll">
+    tools:showIn="@layout/activity_scroll"
+    android:id="@+id/scroll_layout">
 
     <RelativeLayout
         android:id="@+id/layout_scroll"

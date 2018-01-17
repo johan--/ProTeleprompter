@@ -7,6 +7,7 @@ import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -34,6 +35,7 @@ public class ScrollActivityFragment extends Fragment {
     private TextView tv_timer;
     private TextView tv_scrollStartCountDown;
     private TextView tv_scrollContentView;
+    private ConstraintLayout mLayout;
     private CustomImagebutton ib_cameraSwitch;
     private CameraView mCameraView;
     private Camera mCamera;
@@ -41,6 +43,7 @@ public class ScrollActivityFragment extends Fragment {
     private long mCurrentPlayTime;
 
     private final String TAG = getActivity().toString();
+    private final int REQUEST_CAMERA = 0;
 
     private int stopWatch_seconds = 0;
     private boolean scrolling_running;
@@ -90,6 +93,7 @@ public class ScrollActivityFragment extends Fragment {
             }
         });
 
+        //TODO: camera permission requesting have problems, maybe its the reason why camera preview screen is black
         ib_cameraSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +101,7 @@ public class ScrollActivityFragment extends Fragment {
                     Log.i(TAG, "Show camera button pressed. Checking permission.");
                     // BEGIN_INCLUDE(camera_permission)
                     // Check if the Camera permission is already available.
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
                             != PackageManager.PERMISSION_GRANTED) {
                         // Camera permission has not been granted.
 
@@ -126,6 +130,7 @@ public class ScrollActivityFragment extends Fragment {
         fmab_ScrollSwitch = root.findViewById(R.id.fmab_ScrollSwitch);
         tv_timer = root.findViewById(R.id.tv_timer);
         ib_cameraSwitch = root.findViewById(R.id.ib_cameraSwitch);
+        mLayout = root.findViewById(R.id.scroll_layout);
 
 
         mCamera = getCameraInstance();
@@ -208,7 +213,7 @@ public class ScrollActivityFragment extends Fragment {
         Log.i(TAG, "CAMERA permission has NOT been granted. Requesting permission.");
 
         // BEGIN_INCLUDE(camera_permission_request)
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                 Manifest.permission.CAMERA)) {
             // Provide an additional rationale to the user if the permission was not granted
             // and the user would benefit from additional context for the use of the permission.
@@ -229,7 +234,7 @@ public class ScrollActivityFragment extends Fragment {
         } else {
 
             // Camera permission has not been granted yet. Request it directly.
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA},
                     REQUEST_CAMERA);
         }
         // END_INCLUDE(camera_permission_request)
