@@ -1,6 +1,7 @@
 package com.example.android.proteleprompter.Utilities;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -28,6 +29,13 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback{
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        Camera.Parameters params = mCamera.getParameters();
+
+        if (this.getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE)
+        {
+            params.set("orientation", "portrait");
+            mCamera.setDisplayOrientation(90);
+        }
         try {
             mCamera.setPreviewDisplay(holder);
            // mCamera.stopPreview();
@@ -50,6 +58,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback{
             mCamera.stopPreview();
         } catch (Exception e){
             // ignore: tried to stop a non-existent preview
+            Log.d(TAG, "Error changing camera preview: " + e.getMessage());
         }
 
         // set preview size and make any resize, rotate or

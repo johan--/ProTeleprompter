@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sample="http://schemas.android.com/apk/res-auto">>
+
+    <com.pavelsikun.seekbarpreference.SeekBarPreferenceCompat
+        android:key="@string/pref_font_size_key"
+        android:title="@string/pref_font_size_title"
+        android:summary=""
+        android:enabled="false"
+        android:defaultValue="5"
+
+        sample:msbp_minValue="1"
+        sample:msbp_maxValue="10"
+        sample:msbp_interval="1"
+        sample:msbp_measurementUnit="%"
+        sample:msbp_dialogEnabled="false"
+        />
+
+    <android.support.v7.preference.SwitchPreference
+        android:defaultValue="false"
+        android:title="@string/pref_mirrorMode_title"
+        android:key="@string/pref_mirrorMode_key"/>
+
+
+    <CheckBoxPreference
+        android:defaultValue="@string/pref_font_size_option_default"
+        android:key="@string/pref_font_size_key"
+        android:title="@string/pref_font_size_title"/>
+
+
+</PreferenceScreen>

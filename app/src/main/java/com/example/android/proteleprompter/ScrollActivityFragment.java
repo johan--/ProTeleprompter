@@ -2,17 +2,23 @@ package com.example.android.proteleprompter;
 
 import android.Manifest;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -42,8 +48,9 @@ public class ScrollActivityFragment extends Fragment {
     private long mScrollDuration;
     private long mCurrentPlayTime;
 
-    private final String TAG = getActivity().toString();
-    private final int REQUEST_CAMERA = 0;
+    private final String TAG = "ScrollFragment";
+    private final int REQUEST_CAMERA = 330;
+    private static final int FRONT_CAMERA_CODE = 1;
 
     private int stopWatch_seconds = 0;
     private boolean scrolling_running;
@@ -57,6 +64,12 @@ public class ScrollActivityFragment extends Fragment {
     private ObjectAnimator mObjectAnimator;
 
     public ScrollActivityFragment() {
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);//necessary for inflating menu in fragment
     }
 
     @Override
@@ -76,8 +89,6 @@ public class ScrollActivityFragment extends Fragment {
 
         mScrollDuration = 50000;
 
-        mCamera = getCameraInstance();
-
         startScrollCountDown();
 
         startStopWatch();
@@ -93,7 +104,7 @@ public class ScrollActivityFragment extends Fragment {
             }
         });
 
-        //TODO: camera permission requesting have problems, maybe its the reason why camera preview screen is black
+        //TODO: camera permission have issues, after clicking allow, camera won't open until press button again
         ib_cameraSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,6 +134,26 @@ public class ScrollActivityFragment extends Fragment {
         return root;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_scroll, menu);
+        /* Use the inflater's inflate method to inflate our menu layout to this menu */
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id  = item.getItemId();
+        if(id == R.id.action_settings){
+            Intent intent = new Intent(getActivity(), SettingActivity.class);
+            startActivity(intent);
+        }
+
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private void initViews(View root) {
         sv_scrollView = root.findViewById(R.id.sv_scrollingView);
         tv_scrollContentView = root.findViewById(R.id.tv_scrollContentView);
@@ -131,11 +162,9 @@ public class ScrollActivityFragment extends Fragment {
         tv_timer = root.findViewById(R.id.tv_timer);
         ib_cameraSwitch = root.findViewById(R.id.ib_cameraSwitch);
         mLayout = root.findViewById(R.id.scroll_layout);
-
-
-        mCamera = getCameraInstance();
+        //mCamera = getCameraInstance();
         // Create our Preview view and set it as the content of our activity.
-        mCameraView = new CameraView(getActivity(), mCamera);
+
         fl_cameraFrame = root.findViewById(R.id.cameraScreen);
         fl_cameraFrame.setVisibility(View.INVISIBLE);
     }
@@ -204,9 +233,35 @@ public class ScrollActivityFragment extends Fragment {
         mObjectAnimator.start();
     }
 
+    //TODO: opening and closing camera would make UI irresponsive for about 1s
     private void startCamera() {
-        fl_cameraFrame.setVisibility(View.VISIBLE);
+        camera_running = true;
+        if (mCamera == null)
+            mCamera = getCameraInstance();
+        mCameraView = new CameraView(getActivity(), mCamera);
         fl_cameraFrame.addView(mCameraView);
+        fl_cameraFrame.setVisibility(View.VISIBLE);
+
+    }
+
+    private void closeCamera() {
+        fl_cameraFrame.removeView(mCameraView);
+        mCamera.stopPreview();
+        camera_running = false;
+        fl_cameraFrame.setVisibility(View.INVISIBLE);
+    }
+
+    /**
+     * A safe way to get an instance of the Camera object.
+     */
+    public static Camera getCameraInstance() {
+        Camera c = null;
+        try {
+            c = Camera.open(FRONT_CAMERA_CODE); //1 means front camera, 0 means back camera
+        } catch (Exception e) {
+            // Camera is not available (in use or does not exist)
+        }
+        return c; // returns null if camera is unavailable
     }
 
     private void requestCameraPermission() {
@@ -234,30 +289,30 @@ public class ScrollActivityFragment extends Fragment {
         } else {
 
             // Camera permission has not been granted yet. Request it directly.
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA},
+            requestPermissions(new String[]{Manifest.permission.CAMERA},
                     REQUEST_CAMERA);
         }
         // END_INCLUDE(camera_permission_request)
     }
 
-    private void closeCamera() {
-        fl_cameraFrame.removeView(mCameraView);
-        fl_cameraFrame.setVisibility(View.INVISIBLE);
-    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CAMERA) {
 
-    /**
-     * A safe way to get an instance of the Camera object.
-     */
-    public static Camera getCameraInstance() {
-        Camera c = null;
-        try {
-            c = Camera.open(); // attempt to get a Camera instance
-        } catch (Exception e) {
-            // Camera is not available (in use or does not exist)
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                startCamera();
+
+            } else {
+
+                // permission denied, boo! Disable the
+                // functionality that depends on this permission.
+            }
         }
-        return c; // returns null if camera is unavailable
     }
-
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -266,21 +321,30 @@ public class ScrollActivityFragment extends Fragment {
         savedInstanceState.putBoolean("wasRunning", stopWatch_wasRunning);
     }
 
-    //TODO: app will crash when fragment is destoryed
+    //TODO: app will crash when fragment is destroyed because of run background thread
     @Override
     public void onResume() {
         super.onResume();
+
         if (stopWatch_wasRunning) {
             stopWatch_running = true;
         }
     }
 
-    //TODO: app will crash when fragment is destoryed
+    @Override
+    public void onStop() {
+        super.onStop();
+        mCamera.stopPreview();
+    }
+
+
+    //TODO: app will crash when fragment is destroyed because of run background thread
     @Override
     public void onDestroy() {
         super.onDestroy();
         stopWatch_wasRunning = stopWatch_running;
         stopWatch_running = false;
+        mCamera.release();
         mHandler.removeCallbacks(myRunnable);
     }
 }
