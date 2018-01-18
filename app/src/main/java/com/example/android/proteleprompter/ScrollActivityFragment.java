@@ -143,12 +143,11 @@ public class ScrollActivityFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id  = item.getItemId();
-        if(id == R.id.action_settings){
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
             Intent intent = new Intent(getActivity(), SettingActivity.class);
             startActivity(intent);
         }
-
 
 
         return super.onOptionsItemSelected(item);
@@ -334,7 +333,7 @@ public class ScrollActivityFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        mCamera.stopPreview();
+        if (mCamera != null) mCamera.stopPreview();
     }
 
 

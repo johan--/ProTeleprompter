@@ -65,7 +65,7 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
 
     @Override
     public int getItemCount() {
-        return mDocumentList.size();
+        return mDocumentList != null ? mDocumentList.size() : 0;
     }
 
     @Override
@@ -89,14 +89,14 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
 
         TextView fileTitle_tv;
         TextView fileOpenTime_tv;
-        ImageView fileTypeImage_iv;
+        //ImageView fileTypeImage_iv;
 
         public documentsListViewHolder(View view) {
 
             super(view);
             fileTitle_tv = view.findViewById(R.id.tv_fileTitle);
             fileOpenTime_tv = view.findViewById(R.id.tv_fileOpenTime);
-            fileTypeImage_iv = view.findViewById(R.id.iv_fileTypeIcon);
+            //fileTypeImage_iv = view.findViewById(R.id.iv_fileTypeIcon);
 
         }
 
@@ -134,7 +134,7 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
                 default:
                     typeImageid = R.drawable.ic_unkown_file_type_icon;
 
-                    fileTypeImage_iv.setImageResource(typeImageid);
+                    //fileTypeImage_iv.setImageResource(typeImageid);
             }
         }
 

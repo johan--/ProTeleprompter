@@ -35,6 +35,15 @@
     <string name="pref_font_size_key">fontSize</string>
     <string name="pref_font_size_option_default">Normal</string>
 
+    <string name="pref_font_size_option_small">Small</string>
+    <string name="pref_font_size_option_normal">Normal</string>
+    <string name="pref_font_size_option_large">Large</string>
+
+    <string name="pref_font_size_value_small">20</string>
+    <string name="pref_font_size_value_normal">40</string>
+    <string name="pref_font_size_value_large">60</string>
+
+
     <string name="pref_mirrorMode_title">Mirror mode</string>
     <string name="pref_mirrorMode_key">mirrorMode</string>
 
