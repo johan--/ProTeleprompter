@@ -36,6 +36,11 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
         return mCursor;
     }
 
+    public void setCursor(Cursor newCursor){
+        mCursor = newCursor;
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(VH holder, int position) {
         if (!mDataValid) {

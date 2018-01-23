@@ -54,6 +54,7 @@
         <provider
             android:name=".ContentProvider.DocumentProvider"
             android:authorities="com.example.android.proteleprompter.app"
+            android:enabled="true"
             android:exported="false" />
 
     </application>

@@ -66,6 +66,8 @@ public class ScrollActivityFragment extends Fragment {
     public ScrollActivityFragment() {
     }
 
+
+    //TODO: retrieve document data from intent
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

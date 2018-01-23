@@ -5,14 +5,15 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,11 +35,14 @@ import java.util.List;
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends Fragment implements android.support.v4.app.LoaderManager.LoaderCallbacks<Cursor> {
+public class MainFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private DocumentAdaptor mAdaptor;
+
+    //private NewDocumentAdaptor mAdapter2;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -101,23 +105,35 @@ public class MainFragment extends Fragment implements android.support.v4.app.Loa
 
         mDocument_list_rv = root.findViewById(R.id.rv_list);
 
-        setUpListOfDocumentListView(mDocument_list_rv);
-
         mTextView_listSubtitle = root.findViewById(R.id.tv_list_subtitle);
 
         mTextView_listSubtitle.setText("Today");
 
-        getLoaderManager().initLoader(0, null, this);
-
         return root;
     }
 
-    private void setUpListOfDocumentListView(RecyclerView documentList) {
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        setUpListOfDocumentListView(mDocument_list_rv);
+
+        getLoaderManager().initLoader(0, null, this);
+
+    }
+
+    private void setUpListOfDocumentListView(RecyclerView documentListView) {
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        DocumentAdaptor Adaptor = new DocumentAdaptor(getContext(), null);
-        documentList.setAdapter(Adaptor);
-        documentList.setLayoutManager(mLinearLayoutManager);
+        mAdaptor = new DocumentAdaptor(getActivity(), null);
+        mAdaptor.setHasStableIds(true);
+        documentListView.setAdapter(mAdaptor);
+        documentListView.setLayoutManager(mLinearLayoutManager);
+
+    }
+
+    public void updateAdapter() {
+        getLoaderManager().restartLoader(0, null, this);
 
     }
 
@@ -159,8 +175,17 @@ public class MainFragment extends Fragment implements android.support.v4.app.Loa
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         switch (loader.getId()) {
             case 0:
-                Log.d(TAG, "onLoadFinished: loading MORE");
+//                Log.d(TAG, "onLoadFinished: loading MORE");
+//
+//                Cursor cursor = ((DocumentAdaptor) mDocument_list_rv.getAdapter()).getCursor();
+//
+//                //fill all exisitng in adapter
 
+//                fillMx(cursor, mx);
+//
+//                //fill with additional result
+//                fillMx(data, mx);
+//
                 Cursor cursor = ((DocumentAdaptor) mDocument_list_rv.getAdapter()).getCursor();
 
                 //fill all exisitng in adapter
@@ -172,18 +197,19 @@ public class MainFragment extends Fragment implements android.support.v4.app.Loa
 
                 ((DocumentAdaptor) mDocument_list_rv.getAdapter()).swapCursor(mx);
 
-//                handlerToWait.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        loadingMore = false;
-//                    }
-//                }, 2000);
+                handlerToWait.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                    }
+                }, 2000);
 
                 break;
             default:
                 throw new IllegalArgumentException("no loader id handled!");
         }
     }
+
+    private Handler handlerToWait = new Handler();
 
     private void fillMx(Cursor data, MatrixCursor mx) {
         if (data == null)
@@ -203,7 +229,7 @@ public class MainFragment extends Fragment implements android.support.v4.app.Loa
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        mAdaptor.swapCursor(null);
     }
 
 

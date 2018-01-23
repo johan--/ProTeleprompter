@@ -34,7 +34,7 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(mContext).inflate(
+        View view = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.item_document, parent, false);
         final documentsListViewHolder vh = new documentsListViewHolder(view);
 
@@ -42,6 +42,7 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
             @Override
             public void onClick(View v) {
                 Document document = mDocumentList.get(vh.getAdapterPosition());
+
                 Class mScrollActivity = ScrollActivity.class;
 
                 Intent startScrollActivityIntent = new Intent(mContext, mScrollActivity);
@@ -49,6 +50,8 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
                 Bundle documentBundle = new Bundle();
 
                 documentBundle.putSerializable("document", document);
+
+                startScrollActivityIntent.putExtra("bundle", documentBundle);
 
                 ActivityCompat.startActivity(mContext, startScrollActivityIntent, null);
             }
@@ -63,9 +66,10 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
 //        //contentBinding.setViewModel(new DocumentDetailsViewModel(mContext,mDocumentList.get(position)));
 //    }
 
+
     @Override
     public int getItemCount() {
-        return mDocumentList != null ? mDocumentList.size() : 0;
+        return super.getItemCount();
     }
 
     @Override
@@ -80,23 +84,28 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
         holder.setData(cursor);
     }
 
-    public void setDocumentList(List<Document> documentList) {
-        this.mDocumentList = documentList;
-        notifyDataSetChanged();
-    }
+//    @Override
+//    public void setCursor(Cursor newCursor) {
+//        super.setCursor(newCursor);
+//        notifyDataSetChanged();
+//    }
+
+//    public void setDocumentList(List<Document> documentList) {
+//        this.mDocumentList = documentList;
+//        notifyDataSetChanged();
+//    }
 
     public static class documentsListViewHolder extends RecyclerView.ViewHolder {
 
         TextView fileTitle_tv;
         TextView fileOpenTime_tv;
-        //ImageView fileTypeImage_iv;
+        ImageView fileTypeImage_iv;
 
         public documentsListViewHolder(View view) {
-
             super(view);
             fileTitle_tv = view.findViewById(R.id.tv_fileTitle);
             fileOpenTime_tv = view.findViewById(R.id.tv_fileOpenTime);
-            //fileTypeImage_iv = view.findViewById(R.id.iv_fileTypeIcon);
+            fileTypeImage_iv = view.findViewById(R.id.iv_fileTypeIcon);
 
         }
 
@@ -134,8 +143,8 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
                 default:
                     typeImageid = R.drawable.ic_unkown_file_type_icon;
 
-                    //fileTypeImage_iv.setImageResource(typeImageid);
             }
+            fileTypeImage_iv.setImageResource(typeImageid);
         }
 
 //        public void bindDocument(Document document) {

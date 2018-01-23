@@ -1,45 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/tv_list_subtitle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="@dimen/list_subtitle"
+        android:layout_marginLeft="@dimen/horizon_margin"
+        android:layout_marginStart="@dimen/horizon_margin"
+        android:gravity="center_vertical"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+        android:textColor="@android:color/darker_gray"
+        tools:text="Today" />
 
-        <!--<ProgressBar-->
-        <!--android:id="@+id/progress_bar"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--app:visibility="@{documentViewModel.progressBar}" />-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
-        <!--<TextView-->
-        <!--android:id="@+id/label_status"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:gravity="center"-->
-        <!--android:text="@{documentViewModel.messageLabel}"-->
-        <!--app:visibility="@{documentViewModel.documentLabel}" />-->
-
-        <TextView
-            android:id="@+id/tv_list_subtitle"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/list_subtitle"
-            android:layout_marginLeft="@dimen/horizon_margin"
-            android:layout_marginStart="@dimen/horizon_margin"
-            android:gravity="center_vertical"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-            android:textColor="@android:color/darker_gray"
-            tools:text="Today" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_list"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-    </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

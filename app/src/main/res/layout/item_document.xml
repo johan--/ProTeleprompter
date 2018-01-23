@@ -1,69 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/listContent_condtraint_layout"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/list_height">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/listContent_condtraint_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/list_height">
+    <ImageView
+        android:id="@+id/iv_fileTypeIcon"
+        android:layout_width="@dimen/list_icon_size"
+        android:layout_height="@dimen/list_icon_size"
+        android:layout_margin="@dimen/horizon_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/iv_fileTypeIcon"
-            android:layout_width="@dimen/list_icon_size"
-            android:layout_height="@dimen/list_icon_size"
-            android:layout_margin="@dimen/horizon_margin"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/tv_fileTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/horizon_margin"
+        android:layout_marginStart="@dimen/horizon_margin"
+        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
+        android:textSize="@dimen/heading_font_size"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@id/iv_fileTypeIcon"
+        app:layout_constraintTop_toTopOf="@+id/iv_fileTypeIcon"
+        tools:text="111111" />
 
-        <TextView
-            android:id="@+id/tv_fileTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/horizon_margin"
-            android:layout_marginStart="@dimen/horizon_margin"
-            android:textAppearance="@android:style/TextAppearance.Holo.Medium"
-            android:textSize="@dimen/heading_font_size"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toRightOf="@id/iv_fileTypeIcon"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/iv_fileTypeIcon"
-            tools:text="111111" />
+    <TextView
+        android:id="@+id/tv_fileOpenTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@id/tv_fileTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tv_fileTitle"
+        tools:text="Opened at 4 Oct" />
 
-        <TextView
-            android:id="@+id/tv_fileOpenTime"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="@id/tv_fileTitle"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_fileTitle"
-            tools:text="Opened at 4 Oct" />
+    <ImageButton
+        android:id="@+id/image_btn_edit"
+        android:layout_width="@dimen/list_actionIcon_size"
+        android:layout_height="@dimen/list_actionIcon_size"
+        android:layout_marginEnd="@dimen/horizon_margin"
+        android:layout_marginRight="@dimen/horizon_margin"
+        android:background="@android:color/transparent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_edit_black_18dp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/image_btn_delete"
+        app:layout_constraintTop_toBottomOf="parent" />
 
-        <ImageButton
-            android:id="@+id/image_btn_edit"
-            android:layout_width="@dimen/list_actionIcon_size"
-            android:layout_height="@dimen/list_actionIcon_size"
-            android:layout_marginEnd="@dimen/horizon_margin"
-            android:layout_marginRight="@dimen/horizon_margin"
-            android:background="@android:color/transparent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_edit_black_18dp"
-            app:layout_constraintBottom_toTopOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/image_btn_delete"
-            app:layout_constraintTop_toBottomOf="parent" />
-
-        <ImageButton
-            android:id="@+id/image_btn_delete"
-            android:layout_width="@dimen/list_actionIcon_size"
-            android:layout_height="@dimen/list_actionIcon_size"
-            android:layout_marginRight="@dimen/horizon_margin"
-            android:background="@android:color/transparent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_delete_grey"
-            app:layout_constraintBottom_toTopOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="parent" />
+    <ImageButton
+        android:id="@+id/image_btn_delete"
+        android:layout_width="@dimen/list_actionIcon_size"
+        android:layout_height="@dimen/list_actionIcon_size"
+        android:layout_marginEnd="@dimen/horizon_margin"
+        android:layout_marginRight="@dimen/horizon_margin"
+        android:background="@android:color/transparent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_delete_grey"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="parent" />
 
 
-    </android.support.constraint.ConstraintLayout>
-</layout>
+</android.support.constraint.ConstraintLayout>
+

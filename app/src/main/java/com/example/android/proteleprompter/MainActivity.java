@@ -28,6 +28,7 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener {
 
     private static Context mContext;
+    private MainFragment mFragmant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +36,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         setContentView(R.layout.activity_main);
         mContext = getApplicationContext();
 
-        MainFragment fragment = new MainFragment();
+        mFragmant = new MainFragment();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainFragment_container, fragment)
+                .replace(R.id.mainFragment_container, mFragmant)
                 .commit();
 
 //        Toolbar toolbar = findViewById(R.id.toolbar);
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
             public void onClick(View view) {
 
                 performFileSearch();
+
 
             }
         });
@@ -95,7 +97,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
 
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
-        String[] mimeTypes = {"application/pdf",
+        intent.setType("text/rtf");
+
+        String[] mimeTypes = {"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 "text/plain",
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 "application/msword",
@@ -107,9 +111,10 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                 "text/richtext",
                 "text/rtf"};
 
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        //intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
 
         startActivityForResult(intent, READ_REQUEST_CODE);
+
     }
 
 
@@ -145,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                 getContentResolver().insert(DocumentContract.DocumentEntry.CONTENT_URI, fileValue);
 
             }
+            mFragmant.updateAdapter();
 
         }
 
