@@ -10,14 +10,12 @@ import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 
 import com.example.android.proteleprompter.ContentProvider.DocumentContract;
-import com.example.android.proteleprompter.Data.DocumentImport;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     private static Context mContext;
     private MainFragment mFragmant;
 
+    private static final int READ_REQUEST_CODE = 39;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,20 +41,14 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                 .replace(R.id.mainFragment_container, mFragmant)
                 .commit();
 
-//        Toolbar toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 performFileSearch();
-
-
             }
         });
-
 
     }
 
@@ -89,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     public void onFragmentInteraction(Uri uri) {
 
     }
-    private static final int READ_REQUEST_CODE = 39;
+
 
     public void performFileSearch() {
 
@@ -109,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                 "application/rtf",
                 "application/x-rtf",
                 "text/richtext",
+                "application/vnd.google-apps.document",
                 "text/rtf"};
 
         //intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
@@ -128,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
 
             if (returnCursor != null && returnCursor.moveToFirst()) {
                 int fileNameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                String fileName = returnCursor.getColumnName(fileNameIndex);
+                String fileName = returnCursor.getString(fileNameIndex);
 
                 ContentResolver cR = MainActivity.getmContext().getContentResolver();
                 MimeTypeMap mime = MimeTypeMap.getSingleton();
@@ -150,13 +145,12 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                 getContentResolver().insert(DocumentContract.DocumentEntry.CONTENT_URI, fileValue);
 
             }
+            returnCursor.close();
             mFragmant.updateAdapter();
-
         }
-
     }
 
-    private String readTextFile(Uri uri){
+    private String readTextFile(Uri uri) {
         BufferedReader reader = null;
         StringBuilder builder = new StringBuilder();
         try {
@@ -170,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (reader != null){
+            if (reader != null) {
                 try {
                     reader.close();
                 } catch (IOException e) {

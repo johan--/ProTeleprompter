@@ -101,8 +101,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
         View root = inflater.inflate(R.layout.fragment_main, container, false);
 
-        //TODO: need to query document from content provider to save to array list;
-
         mDocument_list_rv = root.findViewById(R.id.rv_list);
 
         mTextView_listSubtitle = root.findViewById(R.id.tv_list_subtitle);
@@ -110,6 +108,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         mTextView_listSubtitle.setText("Today");
 
         return root;
+
     }
 
     @Override
@@ -133,16 +132,15 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     public void updateAdapter() {
+        getLoaderManager().destroyLoader(0);
         getLoaderManager().restartLoader(0, null, this);
-
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+//    public void onButtonPressed(Uri uri) {
+//        if (mListener != null) {
+//            mListener.onFragmentInteraction(uri);
+//        }
+//    }
 
     @Override
     public void onAttach(Context context) {
@@ -175,17 +173,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         switch (loader.getId()) {
             case 0:
-//                Log.d(TAG, "onLoadFinished: loading MORE");
-//
-//                Cursor cursor = ((DocumentAdaptor) mDocument_list_rv.getAdapter()).getCursor();
-//
-//                //fill all exisitng in adapter
 
-//                fillMx(cursor, mx);
-//
-//                //fill with additional result
-//                fillMx(data, mx);
-//
                 Cursor cursor = ((DocumentAdaptor) mDocument_list_rv.getAdapter()).getCursor();
 
                 //fill all exisitng in adapter

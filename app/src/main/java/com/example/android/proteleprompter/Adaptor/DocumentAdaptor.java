@@ -116,28 +116,28 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
             String fileType = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_TYPE));
             int typeImageid;
             switch (fileType) {
-                case ".pdf":
+                case "pdf":
                     typeImageid = R.drawable.ic_pdf;
                     break;
-                case ".txt":
+                case "txt":
                     typeImageid = R.drawable.ic_txt;
                     break;
-                case ".doc":
+                case "doc":
                     typeImageid = R.drawable.ic_doc;
                     break;
-                case ".docx":
+                case "docx":
                     typeImageid = R.drawable.ic_doc;
                     break;
-                case ".ppt":
+                case "ppt":
                     typeImageid = R.drawable.ic_ppt;
                     break;
-                case ".pptx":
+                case "pptx":
                     typeImageid = R.drawable.ic_ppt;
                     break;
-                case ".rtf":
+                case "rtf":
                     typeImageid = R.drawable.ic_rtf;
                     break;
-                case ".rtx":
+                case "rtx":
                     typeImageid = R.drawable.ic_rtf;
                     break;
                 default:
@@ -147,13 +147,6 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
             fileTypeImage_iv.setImageResource(typeImageid);
         }
 
-//        public void bindDocument(Document document) {
-//            if (mListContentBinding.getViewModel() == null) {
-//                mListContentBinding.setViewModel(new DocumentDetailsViewModel(itemView.getContext(), document));
-//            } else {
-//                mListContentBinding.getViewModel().setDocument(document);
-//            }
-//        }
     }
 }
 
