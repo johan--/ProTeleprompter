@@ -68,7 +68,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent intent = new Intent(this, SettingActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                 "application/vnd.google-apps.document",
                 "text/rtf"};
 
-        //intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
 
         startActivityForResult(intent, READ_REQUEST_CODE);
 

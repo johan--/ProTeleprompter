@@ -13,50 +13,48 @@
         android:required="false" />
 
     <application
+        android:name=".EnableMultiDex"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-
-        android:name=".EnableMultiDex"
-        android:hardwareAccelerated="true"
-        android:largeHeap="true"
         tools:node="replace">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
             <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ScrollActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
 
         </activity>
-
         <activity
             android:name=".SettingActivity"
-            android:label="@string/action_settings"/>
+            android:label="@string/action_settings" />
 
         <provider
             android:name=".ContentProvider.DocumentProvider"
             android:authorities="com.example.android.proteleprompter.app"
             android:enabled="true"
             android:exported="false" />
-
     </application>
 
 </manifest>

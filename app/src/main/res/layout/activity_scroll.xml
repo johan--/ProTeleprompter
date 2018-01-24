@@ -1,24 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.proteleprompter.ScrollActivity">
-
-    <!--&lt;!&ndash;<android.support.design.widget.AppBarLayout&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:theme="@style/AppTheme.AppBarOverlay">&ndash;&gt;-->
-
-        <!--&lt;!&ndash;<android.support.v7.widget.Toolbar&ndash;&gt;-->
-            <!--&lt;!&ndash;android:id="@+id/toolbar"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_height="?attr/actionBarSize"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:background="?attr/colorPrimary"&ndash;&gt;-->
-            <!--&lt;!&ndash;app:popupTheme="@style/AppTheme.PopupOverlay" />&ndash;&gt;-->
-
-    <!--</android.support.design.widget.AppBarLayout>-->
 
     <include layout="@layout/content_scroll" />
 

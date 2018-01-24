@@ -1,6 +1,7 @@
 package com.example.android.proteleprompter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
@@ -15,6 +16,9 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -94,6 +98,22 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         }
 
     }
+
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        super.onCreateOptionsMenu(menu, inflater);
+//        inflater.inflate(R.menu.menu_scroll, menu);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//        if (id == R.id.action_settings) {
+//            Intent intent = new Intent(getActivity(), SettingActivity.class);
+//            startActivity(intent);
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

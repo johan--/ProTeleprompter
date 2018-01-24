@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.kizitonwose.colorpreference.ColorPreference
+        android:defaultValue="@color/font_default_colour"
+        android:title="@string/pref_display_font_colour_title"
+        android:key="@string/pref_display_font_colour_key"
+        android:summary="@string/pref_display_font_colour_summary" />
+
+    <com.kizitonwose.colorpreference.ColorPreference
+        android:defaultValue="@color/background_default_colour"
+        android:title="@string/pref_display_background_colour_title"
+        android:key="@string/pref_display_background_colour_key"
+        android:summary="@string/pref_display_background_colour_summary"/>
+</PreferenceScreen>
