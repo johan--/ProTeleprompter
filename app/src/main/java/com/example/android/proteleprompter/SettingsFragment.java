@@ -33,7 +33,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             @Override
             public boolean onPreferenceClick(Preference preference) {
 
-                showFontColourPickerDialog();
+                //showFontColourPickerDialog();
 
                 return true;
             }
@@ -43,7 +43,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             @Override
             public boolean onPreferenceClick(Preference preference) {
 
-                showBackgroundColourPickerDialog();
+                //showBackgroundColourPickerDialog();
 
                 return true;
             }
@@ -63,20 +63,20 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 //        }
     }
 
-    private void showBackgroundColourPickerDialog() {
-        new ColorDialog.Builder(getActivity().getBaseContext())
-                .setColorShape(ColorShape.CIRCLE) //CIRCLE or SQUARE
-                .setTag(BACKGROUND_COLOUR_PICKER_PREFERENCE_TAG) // tags can be useful when multiple components use the picker within an activity
-                .show();
+//    private void showBackgroundColourPickerDialog() {
+//        new ColorDialog.Builder(getActivity().getBaseContext())
+//                .setColorShape(ColorShape.CIRCLE) //CIRCLE or SQUARE
+//                .setTag(BACKGROUND_COLOUR_PICKER_PREFERENCE_TAG) // tags can be useful when multiple components use the picker within an activity
+//                .show();
+//
+//    }
 
-    }
-
-    private void showFontColourPickerDialog() {
-        new ColorDialog.Builder(this)
-                .setColorShape(ColorShape.CIRCLE) //CIRCLE or SQUARE
-                .setTag(FONT_COLOUR_PICKER_PREFERENCE_TAG) // tags can be useful when multiple components use the picker within an activity
-                .show();
-    }
+//    private void showFontColourPickerDialog() {
+//        new ColorDialog.Builder(this)
+//                .setColorShape(ColorShape.CIRCLE) //CIRCLE or SQUARE
+//                .setTag(FONT_COLOUR_PICKER_PREFERENCE_TAG) // tags can be useful when multiple components use the picker within an activity
+//                .show();
+//    }
 
 
     @Override

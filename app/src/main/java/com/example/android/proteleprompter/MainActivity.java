@@ -1,5 +1,6 @@
 package com.example.android.proteleprompter;
 
+import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,9 +8,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.OpenableColumns;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
             @Override
             public void onClick(View view) {
                 performFileSearch();
+                //openFileExplorer();
             }
         });
 
@@ -88,11 +92,11 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
 
     public void performFileSearch() {
 
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
-        intent.setType("text/rtf");
+        intent.setType("*/*");
 
         String[] mimeTypes = {"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 "text/plain",
@@ -107,10 +111,20 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                 "application/vnd.google-apps.document",
                 "text/rtf"};
 
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        //intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
 
         startActivityForResult(intent, READ_REQUEST_CODE);
 
+    }
+
+    private void openFileExplorer(){
+        Intent fileintent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        fileintent.setType("*/*");
+        try {
+            startActivityForResult(fileintent, READ_REQUEST_CODE);
+        } catch (ActivityNotFoundException e) {
+            Log.e("tag", "No activity can handle picking a file. Showing alternatives.");
+        }
     }
 
 
@@ -142,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                 fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_TYPE, fileType);
                 fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_LASTOPENTIME, fileTime);
                 fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_CONTENT, fileText);
+                fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_URI, fileImportedUri.toString());
 
                 getContentResolver().insert(DocumentContract.DocumentEntry.CONTENT_URI, fileValue);
 

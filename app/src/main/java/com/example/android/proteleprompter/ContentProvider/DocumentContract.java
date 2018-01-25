@@ -13,7 +13,7 @@ public class DocumentContract {
 
     public static final class DocumentEntry implements BaseColumns {
 
-        public static final String TABLE_NAME = "importedDocumentList";
+        public static final String TABLE_NAME = "fileList";
 
         public static final String _ID = "_id";
 
@@ -24,6 +24,8 @@ public class DocumentContract {
         public static final String COLUMN_DOCUMENT_LASTOPENTIME = "documentLastOpenTime";
 
         public static final String COLUMN_DOCUMENT_CONTENT = "documentContent";
+
+        public static final String COLUMN_DOCUMENT_URI = "documentUri";
 
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(TABLE_NAME).build();
@@ -38,7 +40,13 @@ public class DocumentContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static String[] Columns = new String[]{_ID, COLUMN_DOCUMENT_NAME, COLUMN_DOCUMENT_TYPE, COLUMN_DOCUMENT_LASTOPENTIME, COLUMN_DOCUMENT_CONTENT};
+        public static String[] Columns = new String[]{_ID,
+                COLUMN_DOCUMENT_NAME,
+                COLUMN_DOCUMENT_TYPE,
+                COLUMN_DOCUMENT_LASTOPENTIME,
+                COLUMN_DOCUMENT_CONTENT,
+                COLUMN_DOCUMENT_URI
+        };
 
     }
 }

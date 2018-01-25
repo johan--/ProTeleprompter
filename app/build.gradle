@@ -33,6 +33,7 @@ dependencies {
     compile 'com.android.support:preference-v14:26.1.0'
     implementation 'com.github.kizitonwose.colorpreference:support:1.0.5'
     compile 'com.pavelsikun:material-seekbar-preference:2.3.0+'
+    compile 'com.github.barteksc:android-pdf-viewer:2.1.0'
     compile 'com.android.support:multidex:1.0.2'
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support:design:26.1.0'

@@ -18,11 +18,14 @@ import com.example.android.proteleprompter.Data.Document;
 import com.example.android.proteleprompter.R;
 import com.example.android.proteleprompter.ScrollActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DocumentAdaptor extends CursorRecyclerViewAdapter {
 
-    private List<Document> mDocumentList;
+    private List<Document> mDocumentList = new ArrayList<>();
+
+    private Document mDocument;
 
     private Context mContext;
 
@@ -41,31 +44,13 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Document document = mDocumentList.get(vh.getAdapterPosition());
 
-                Class mScrollActivity = ScrollActivity.class;
+                openScrollingActivity(vh);
 
-                Intent startScrollActivityIntent = new Intent(mContext, mScrollActivity);
-
-                Bundle documentBundle = new Bundle();
-
-                documentBundle.putSerializable("document", document);
-
-                startScrollActivityIntent.putExtra("bundle", documentBundle);
-
-                ActivityCompat.startActivity(mContext, startScrollActivityIntent, null);
             }
         });
         return vh;
     }
-
-//    @Override
-//    public void onBindViewHolder(documentsListViewHolder holder, int position) {
-//        //RecyclerviewListContentBinding contentBinding = holder.mListContentBinding;
-//        holder.bindDocument(mDocumentList.get(position));
-//        //contentBinding.setViewModel(new DocumentDetailsViewModel(mContext,mDocumentList.get(position)));
-//    }
-
 
     @Override
     public int getItemCount() {
@@ -82,20 +67,27 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
         documentsListViewHolder holder = (documentsListViewHolder) viewHolder;
         cursor.moveToPosition(cursor.getPosition());
         holder.setData(cursor);
+        mDocumentList.add(mDocument);
     }
 
-//    @Override
-//    public void setCursor(Cursor newCursor) {
-//        super.setCursor(newCursor);
-//        notifyDataSetChanged();
-//    }
+    private void openScrollingActivity(documentsListViewHolder vh){
 
-//    public void setDocumentList(List<Document> documentList) {
-//        this.mDocumentList = documentList;
-//        notifyDataSetChanged();
-//    }
+        Document document = mDocumentList.get(vh.getAdapterPosition());
 
-    public static class documentsListViewHolder extends RecyclerView.ViewHolder {
+        Class mScrollActivity = ScrollActivity.class;
+
+        Intent startScrollActivityIntent = new Intent(mContext, mScrollActivity);
+
+        Bundle documentBundle = new Bundle();
+
+        documentBundle.putSerializable("document", document);
+
+        startScrollActivityIntent.putExtra("bundle", documentBundle);
+
+        ActivityCompat.startActivity(mContext, startScrollActivityIntent, null);
+    }
+
+    public class documentsListViewHolder extends RecyclerView.ViewHolder {
 
         TextView fileTitle_tv;
         TextView fileOpenTime_tv;
@@ -109,42 +101,54 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
 
         }
 
+        private void setDocumentData(Cursor c){
+            mDocument = new Document();
+            mDocument.title = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_NAME));
+            mDocument.documentType = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_TYPE));
+            mDocument.time = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_LASTOPENTIME));
+            mDocument.text = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_CONTENT));
+            mDocument.documentUri = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_URI));
+        }
+
         public void setData(Cursor c) {
+
             fileTitle_tv.setText(c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_NAME)));
             fileOpenTime_tv.setText(c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_LASTOPENTIME)));
-
             String fileType = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_TYPE));
-            int typeImageid;
+
+            int typeImageId;
             switch (fileType) {
                 case "pdf":
-                    typeImageid = R.drawable.ic_pdf;
+                    typeImageId = R.drawable.ic_pdf;
                     break;
                 case "txt":
-                    typeImageid = R.drawable.ic_txt;
+                    typeImageId = R.drawable.ic_txt;
                     break;
                 case "doc":
-                    typeImageid = R.drawable.ic_doc;
+                    typeImageId = R.drawable.ic_doc;
                     break;
                 case "docx":
-                    typeImageid = R.drawable.ic_doc;
+                    typeImageId = R.drawable.ic_doc;
                     break;
                 case "ppt":
-                    typeImageid = R.drawable.ic_ppt;
+                    typeImageId = R.drawable.ic_ppt;
                     break;
                 case "pptx":
-                    typeImageid = R.drawable.ic_ppt;
+                    typeImageId = R.drawable.ic_ppt;
                     break;
                 case "rtf":
-                    typeImageid = R.drawable.ic_rtf;
+                    typeImageId = R.drawable.ic_rtf;
                     break;
                 case "rtx":
-                    typeImageid = R.drawable.ic_rtf;
+                    typeImageId = R.drawable.ic_rtf;
                     break;
                 default:
-                    typeImageid = R.drawable.ic_unkown_file_type_icon;
+                    typeImageId = R.drawable.ic_unkown_file_type_icon;
 
             }
-            fileTypeImage_iv.setImageResource(typeImageid);
+            fileTypeImage_iv.setImageResource(typeImageId);
+
+            setDocumentData(c);
         }
 
     }

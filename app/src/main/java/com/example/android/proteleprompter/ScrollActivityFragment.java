@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -25,15 +26,19 @@ import android.widget.FrameLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.example.android.proteleprompter.Data.Document;
 import com.example.android.proteleprompter.Utilities.CameraView;
 import com.example.android.proteleprompter.Utilities.CustomImagebutton;
+import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
+import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
+import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 
 import be.rijckaert.tim.animatedvector.FloatingMusicActionButton;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ScrollActivityFragment extends Fragment {
+public class ScrollActivityFragment extends Fragment implements OnPageChangeListener, OnLoadCompleteListener {
 
     private ScrollView sv_scrollView;
     private FrameLayout fl_cameraFrame;
@@ -45,6 +50,9 @@ public class ScrollActivityFragment extends Fragment {
     private CustomImagebutton ib_cameraSwitch;
     private CameraView mCameraView;
     private Camera mCamera;
+    private Document mDocument;
+    private Uri mDocumentContentUri;
+    private String mDocumentContnet;
     private long mScrollDuration;
     private long mCurrentPlayTime;
 
@@ -72,6 +80,15 @@ public class ScrollActivityFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);//necessary for inflating menu in fragment
+        try {
+            mDocument = (Document) getActivity().getIntent().getBundleExtra("bundle").getSerializable("document");
+        } catch (NullPointerException e) {
+            Log.e(TAG, e.toString());
+        }
+        if (mDocument != null) {
+            mDocumentContentUri = Uri.parse(mDocument.documentUri);
+            mDocumentContnet = mDocument.text;
+        }
     }
 
     @Override
@@ -156,6 +173,7 @@ public class ScrollActivityFragment extends Fragment {
     }
 
     private void initViews(View root) {
+
         sv_scrollView = root.findViewById(R.id.sv_scrollingView);
         tv_scrollContentView = root.findViewById(R.id.tv_scrollContentView);
         tv_scrollStartCountDown = root.findViewById(R.id.tv_startScrollCountDown);
@@ -163,11 +181,18 @@ public class ScrollActivityFragment extends Fragment {
         tv_timer = root.findViewById(R.id.tv_timer);
         ib_cameraSwitch = root.findViewById(R.id.ib_cameraSwitch);
         mLayout = root.findViewById(R.id.scroll_layout);
-        //mCamera = getCameraInstance();
-        // Create our Preview view and set it as the content of our activity.
 
         fl_cameraFrame = root.findViewById(R.id.cameraScreen);
         fl_cameraFrame.setVisibility(View.INVISIBLE);
+
+//        tv_scrollContentView.fromUri(mDocumentContentUri) // all pages are displayed by default
+//                .defaultPage(0)
+//                .onPageChange(this)
+//                .enableAnnotationRendering(true)
+//                .onLoad(this)
+//                .scrollHandle(new DefaultScrollHandle(getActivity()))
+//                .load();
+        tv_scrollContentView.setText(mDocumentContnet);
     }
 
     private void startScrollCountDown() {
@@ -347,6 +372,16 @@ public class ScrollActivityFragment extends Fragment {
         stopWatch_running = false;
         mCamera.release();
         mHandler.removeCallbacks(myRunnable);
+    }
+
+    @Override
+    public void loadComplete(int nbPages) {
+
+    }
+
+    @Override
+    public void onPageChanged(int page, int pageCount) {
+
     }
 }
 
