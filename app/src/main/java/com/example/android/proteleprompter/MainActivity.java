@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.provider.OpenableColumns;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -148,7 +149,17 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                 String fileTime = df.format(c.getTime());
 
-                String fileText = readTextFile(fileImportedUri);
+                String fileText;
+
+                //TODO: if file type is rtf, doc, pdf and ppt, text need to be detected specifically
+                switch (fileType){
+                    case "txt": fileText  = readTextFromTxtFile(fileImportedUri); break;
+                    case "rtf": fileText  = readTextFromRtfFile(); break;
+                    case "ppt": fileText  = readTextFromPdfFile(); break;
+                    case "doc": fileText  = readTextFromDocFile(); break;
+                    case "pdf": fileText  = readTextFromPptFile(); break;
+                    default: fileText  = readTextFromTxtFile(fileImportedUri);
+                }
 
                 ContentValues fileValue = new ContentValues();
 
@@ -166,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         }
     }
 
-    private String readTextFile(Uri uri) {
+    private String readTextFromTxtFile(Uri uri) {
         BufferedReader reader = null;
         StringBuilder builder = new StringBuilder();
         try {
@@ -189,5 +200,17 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
             }
         }
         return builder.toString();
+    }
+
+    private String readTextFromRtfFile(){
+
+
+    }
+    private String readTextFromPdfFile(){
+
+    } private String readTextFromDocFile(){
+
+    } private String readTextFromPptFile(){
+
     }
 }

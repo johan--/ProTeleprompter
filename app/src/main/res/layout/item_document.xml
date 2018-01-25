@@ -21,9 +21,9 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/horizon_margin"
         android:layout_marginStart="@dimen/horizon_margin"
-        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:textColor="@android:color/black"
         android:textSize="@dimen/heading_font_size"
-        android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@id/iv_fileTypeIcon"
         app:layout_constraintTop_toTopOf="@+id/iv_fileTypeIcon"
         tools:text="111111" />

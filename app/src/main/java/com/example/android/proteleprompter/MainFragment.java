@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -104,9 +105,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
         mDocument_list_rv = root.findViewById(R.id.rv_list);
 
-        mTextView_listSubtitle = root.findViewById(R.id.tv_list_subtitle);
-
-        mTextView_listSubtitle.setText("Today");
+//        mTextView_listSubtitle = root.findViewById(R.id.tv_list_subtitle);
+//
+//        mTextView_listSubtitle.setText("Today");
 
         return root;
 
@@ -128,6 +129,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         mAdaptor.setHasStableIds(true);
         documentListView.setAdapter(mAdaptor);
         documentListView.setLayoutManager(mLinearLayoutManager);
+        DividerItemDecoration mDividerItemDecoration = new DividerItemDecoration(documentListView.getContext(),
+                mLinearLayoutManager.getOrientation());
+        documentListView.addItemDecoration(mDividerItemDecoration);
 
     }
 

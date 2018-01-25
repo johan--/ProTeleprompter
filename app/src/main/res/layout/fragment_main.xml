@@ -7,16 +7,16 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_list_subtitle"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/list_subtitle"
-        android:layout_marginLeft="@dimen/horizon_margin"
-        android:layout_marginStart="@dimen/horizon_margin"
-        android:gravity="center_vertical"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-        android:textColor="@android:color/darker_gray"
-        tools:text="Today" />
+    <!--<TextView-->
+        <!--android:id="@+id/tv_list_subtitle"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/list_subtitle"-->
+        <!--android:layout_marginLeft="@dimen/horizon_margin"-->
+        <!--android:layout_marginStart="@dimen/horizon_margin"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"-->
+        <!--android:textColor="@android:color/darker_gray"-->
+        <!--tools:text="Today" />-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_list"
