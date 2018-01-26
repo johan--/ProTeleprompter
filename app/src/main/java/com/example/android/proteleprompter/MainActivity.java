@@ -1,6 +1,5 @@
 package com.example.android.proteleprompter;
 
-import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,12 +7,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.OpenableColumns;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -118,16 +114,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
 
     }
 
-    private void openFileExplorer(){
-        Intent fileintent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-        fileintent.setType("*/*");
-        try {
-            startActivityForResult(fileintent, READ_REQUEST_CODE);
-        } catch (ActivityNotFoundException e) {
-            Log.e("tag", "No activity can handle picking a file. Showing alternatives.");
-        }
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -149,16 +135,27 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                 String fileTime = df.format(c.getTime());
 
-                String fileText;
+                String fileText = "";
 
-                //TODO: if file type is rtf, doc, pdf and ppt, text need to be detected specifically
-                switch (fileType){
-                    case "txt": fileText  = readTextFromTxtFile(fileImportedUri); break;
-                    case "rtf": fileText  = readTextFromRtfFile(); break;
-                    case "ppt": fileText  = readTextFromPdfFile(); break;
-                    case "doc": fileText  = readTextFromDocFile(); break;
-                    case "pdf": fileText  = readTextFromPptFile(); break;
-                    default: fileText  = readTextFromTxtFile(fileImportedUri);
+                //TODO: txt is working well, next mission is google document
+                switch (fileType) {
+                    case "txt":
+                        fileText = readTextFromTxtFile(fileImportedUri);
+                        break;
+                    case "rtf":
+                        fileText = readTextFromRtfFile();
+                        break;
+                    case "pdf":
+                        fileText = readTextFromPdfFile(fileImportedUri);
+                        break;
+                    case "doc":
+                        fileText = readTextFromDocFile(fileImportedUri);
+                        break;
+                    case "ppt":
+                        fileText = readTextFromPptFile();
+                        break;
+                    default:
+                        fileText = readTextFromTxtFile(fileImportedUri);
                 }
 
                 ContentValues fileValue = new ContentValues();
@@ -202,15 +199,31 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         return builder.toString();
     }
 
-    private String readTextFromRtfFile(){
+    private String readTextFromRtfFile() {
+        String rtfText = "";
 
+
+        return rtfText;
 
     }
-    private String readTextFromPdfFile(){
 
-    } private String readTextFromDocFile(){
+    private String readTextFromPdfFile(Uri pdfuri) {
+        String pdfText = "";
 
-    } private String readTextFromPptFile(){
+        return pdfText;
+    }
 
+    private String readTextFromDocFile(Uri pdfuri) {
+
+        String docText = "";
+
+        return docText;
+
+    }
+
+    private String readTextFromPptFile() {
+        String pptText = "";
+
+        return pptText;
     }
 }
