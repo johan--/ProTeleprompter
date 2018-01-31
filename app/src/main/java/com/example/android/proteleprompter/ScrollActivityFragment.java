@@ -2,13 +2,16 @@ package com.example.android.proteleprompter;
 
 import android.Manifest;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -16,6 +19,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,16 +33,13 @@ import android.widget.TextView;
 import com.example.android.proteleprompter.Data.Document;
 import com.example.android.proteleprompter.Utilities.CameraView;
 import com.example.android.proteleprompter.Utilities.CustomImagebutton;
-import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
-import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
-import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 
 import be.rijckaert.tim.animatedvector.FloatingMusicActionButton;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ScrollActivityFragment extends Fragment implements OnPageChangeListener, OnLoadCompleteListener {
+public class ScrollActivityFragment extends Fragment{
 
     private ScrollView sv_scrollView;
     private FrameLayout fl_cameraFrame;
@@ -52,7 +53,7 @@ public class ScrollActivityFragment extends Fragment implements OnPageChangeList
     private Camera mCamera;
     private Document mDocument;
     private Uri mDocumentContentUri;
-    private String mDocumentContnet;
+    private String mDocumentContent;
     private long mScrollDuration;
     private long mCurrentPlayTime;
 
@@ -66,8 +67,13 @@ public class ScrollActivityFragment extends Fragment implements OnPageChangeList
     private boolean stopWatch_wasRunning;
     private boolean camera_running;
 
-    private Handler mHandler;
-    private Runnable myRunnable;
+    private int mFontSize;
+    private boolean mMirrorModeOn;
+    private int mFontColour;
+    private int mBackgroundColour;
+
+    private Handler mStopWatchHandler;
+    private Runnable mStopWatchRunnable;
 
     private ObjectAnimator mObjectAnimator;
 
@@ -87,7 +93,7 @@ public class ScrollActivityFragment extends Fragment implements OnPageChangeList
         }
         if (mDocument != null) {
             mDocumentContentUri = Uri.parse(mDocument.documentUri);
-            mDocumentContnet = mDocument.text;
+            mDocumentContent = mDocument.text;
         }
     }
 
@@ -119,7 +125,7 @@ public class ScrollActivityFragment extends Fragment implements OnPageChangeList
             public void onClick(View view) {
                 if (scrolling_running)
                     stopScrolling();
-                else startScrolling();
+                else restartScrolling();
             }
         });
 
@@ -154,6 +160,24 @@ public class ScrollActivityFragment extends Fragment implements OnPageChangeList
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        updateViews();
+    }
+
+    private void updateViews(){
+        getStoredSettingAttrs();
+
+
+        tv_scrollContentView.setTextSize(mFontSize);
+
+//        tv_scrollContentView.setTextColor(mFontColour);
+//        tv_scrollContentView.setBackgroundColor(mBackgroundColour);
+
+
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_scroll, menu);
@@ -185,14 +209,9 @@ public class ScrollActivityFragment extends Fragment implements OnPageChangeList
         fl_cameraFrame = root.findViewById(R.id.cameraScreen);
         fl_cameraFrame.setVisibility(View.INVISIBLE);
 
-//        tv_scrollContentView.fromUri(mDocumentContentUri) // all pages are displayed by default
-//                .defaultPage(0)
-//                .onPageChange(this)
-//                .enableAnnotationRendering(true)
-//                .onLoad(this)
-//                .scrollHandle(new DefaultScrollHandle(getActivity()))
-//                .load();
-        tv_scrollContentView.setText(mDocumentContnet);
+        tv_scrollContentView.setText(mDocumentContent);
+        fmab_ScrollSwitch.changeMode(FloatingMusicActionButton.Mode.PLAY_TO_STOP);
+
     }
 
     private void startScrollCountDown() {
@@ -208,7 +227,10 @@ public class ScrollActivityFragment extends Fragment implements OnPageChangeList
     }
 
     private void startStopWatch() {
-        new Handler().postDelayed(new Runnable() {
+
+        mStopWatchHandler = new Handler();
+
+        mStopWatchRunnable = new Runnable(){
             @Override
             public void run() {
 
@@ -223,12 +245,12 @@ public class ScrollActivityFragment extends Fragment implements OnPageChangeList
                     stopWatch_seconds++;
                 }
 
-                mHandler.postDelayed(this, 1000);
+                mStopWatchHandler.postDelayed(mStopWatchRunnable, 1000);
             }
-        }, 3000);
+        };
 
-        mHandler = new Handler();
-        mHandler.post(myRunnable);
+
+        mStopWatchHandler.postDelayed(mStopWatchRunnable, 3000);
     }
 
     private void startScrolling(final long duration) {
@@ -241,10 +263,16 @@ public class ScrollActivityFragment extends Fragment implements OnPageChangeList
                 scrolling_running = true;
                 mObjectAnimator = ObjectAnimator.ofInt(sv_scrollView, "scrollY", tv_scrollContentView.getBottom()).setDuration(duration);
                 mObjectAnimator.start();
-                fmab_ScrollSwitch.playAnimation();
+                fmab_ScrollSwitch.changeMode(FloatingMusicActionButton.Mode.PAUSE_TO_PLAY);
+
+                //mScrollingHandler.postDelayed(this, 100);
+
+
             }
         }, 3000);
 
+//        mScrollingHandler = new Handler();
+//        mScrollingHandler.post(mScrollingRunnable);
     }
 
     private void stopScrolling() {
@@ -253,7 +281,7 @@ public class ScrollActivityFragment extends Fragment implements OnPageChangeList
         mObjectAnimator.cancel();
     }
 
-    private void startScrolling() {
+    private void restartScrolling() {
         scrolling_running = true;
         mObjectAnimator.setCurrentPlayTime(mCurrentPlayTime);
         mObjectAnimator.start();
@@ -275,6 +303,14 @@ public class ScrollActivityFragment extends Fragment implements OnPageChangeList
         mCamera.stopPreview();
         camera_running = false;
         fl_cameraFrame.setVisibility(View.INVISIBLE);
+    }
+
+    private void getStoredSettingAttrs(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mFontSize = sharedPreferences.getInt("fontSize", 30);
+        mMirrorModeOn = sharedPreferences.getBoolean("mirrorMode", false);
+        mFontColour = sharedPreferences.getInt("fontColour", R.color.font_default_colour);
+        mBackgroundColour = sharedPreferences.getInt("backgroundColour", R.color.background_default_colour);
     }
 
     /**
@@ -359,29 +395,23 @@ public class ScrollActivityFragment extends Fragment implements OnPageChangeList
 
     @Override
     public void onStop() {
-        super.onStop();
+
         if (mCamera != null) mCamera.stopPreview();
-    }
-
-
-    //TODO: app will crash when fragment is destroyed because of run background thread
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
         stopWatch_wasRunning = stopWatch_running;
         stopWatch_running = false;
-        mCamera.release();
-        mHandler.removeCallbacks(myRunnable);
+        if(mCamera != null) mCamera.release();
+        mStopWatchHandler.removeCallbacks(mStopWatchRunnable);
+
+        fmab_ScrollSwitch.clearAnimation();
+
+        super.onStop();
     }
 
-    @Override
-    public void loadComplete(int nbPages) {
-
-    }
 
     @Override
-    public void onPageChanged(int page, int pageCount) {
+    public void onDestroy() {
 
+        super.onDestroy();
     }
 }
 

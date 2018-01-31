@@ -42,6 +42,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private DocumentAdaptor mAdaptor;
+    public final int INIT_CURSOR_ID = 0;
 
     //private NewDocumentAdaptor mAdapter2;
 
@@ -105,10 +106,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
         mDocument_list_rv = root.findViewById(R.id.rv_list);
 
-//        mTextView_listSubtitle = root.findViewById(R.id.tv_list_subtitle);
-//
-//        mTextView_listSubtitle.setText("Today");
-
         return root;
 
     }
@@ -116,10 +113,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getLoaderManager().initLoader(0, null, this);
+        getLoaderManager().initLoader(INIT_CURSOR_ID, null, this);
         setUpListOfDocumentListView(mDocument_list_rv);
-
-
     }
 
     private void setUpListOfDocumentListView(RecyclerView documentListView) {
@@ -136,8 +131,10 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     public void updateAdapter() {
-        getLoaderManager().destroyLoader(0);
-        getLoaderManager().restartLoader(0, null, this);
+
+        getLoaderManager().destroyLoader(INIT_CURSOR_ID);
+        mAdaptor.mDocumentList.clear();
+        getLoaderManager().restartLoader(INIT_CURSOR_ID, null, this);
     }
 
 //    public void onButtonPressed(Uri uri) {
@@ -166,8 +163,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
-            case 0:
+            case INIT_CURSOR_ID:
                 return new CursorLoader(getActivity(), DocumentContract.DocumentEntry.CONTENT_URI, null, null, null, null);
+
             default:
                 throw new IllegalArgumentException("no id handled!");
         }
@@ -176,7 +174,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         switch (loader.getId()) {
-            case 0:
+            case INIT_CURSOR_ID: {
 
                 Cursor cursor = ((DocumentAdaptor) mDocument_list_rv.getAdapter()).getCursor();
 
@@ -196,6 +194,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 }, 2000);
 
                 break;
+            }
+
             default:
                 throw new IllegalArgumentException("no loader id handled!");
         }

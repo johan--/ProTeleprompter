@@ -1,87 +1,74 @@
 package com.example.android.proteleprompter;
 
 
+
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.support.v7.preference.PreferenceManager;
+import android.support.v7.preference.PreferenceScreen;
+import android.support.v7.preference.SwitchPreferenceCompat;
 
-import com.kizitonwose.colorpreference.ColorDialog;
-import com.kizitonwose.colorpreference.ColorShape;
-
-
-public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener ,
-        ColorDialog.OnColorSelectedListener{
-
-    private final String FONT_COLOUR_PICKER_PREFERENCE_KEY = "fontColour";
-
-    private final String FONT_COLOUR_PICKER_PREFERENCE_TAG = "fontColourTag";
-
-    private final String BACKGROUND_COLOUR_PICKER_PREFERENCE_KEY = "backgroundColour";
-
-    private final String BACKGROUND_COLOUR_PICKER_PREFERENCE_TAG = "backgroundColourTag";
+import static android.content.Context.MODE_PRIVATE;
 
 
+public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener,
+        Preference.OnPreferenceClickListener {
+
+    private boolean mMirrorModeOn;
+    private int mFontSize;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.pref_scrolling_settings);
 
-        findPreference(FONT_COLOUR_PICKER_PREFERENCE_KEY).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
+        SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
+        PreferenceScreen prefScreen = getPreferenceScreen();
+        int count = prefScreen.getPreferenceCount();
+        for (int i = 0; i < count; i++) {
+            Preference p = prefScreen.getPreference(i);
 
-                //showFontColourPickerDialog();
+            if (i == 2) {
+                p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
 
-                return true;
+                        Intent intent = new Intent(getActivity(), ColourSettingActivity.class);
+
+                        startActivity(intent);
+
+                        return true;
+                    }
+                });
             }
-        });
 
-        findPreference(BACKGROUND_COLOUR_PICKER_PREFERENCE_KEY).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
+            if (p instanceof ListPreference) {
 
-                //showBackgroundColourPickerDialog();
+                String value = sharedPreferences.getString(p.getKey(), "fontSize");
+                setPreferenceSummary(p, value);
 
-                return true;
+            } else if (p instanceof SwitchPreferenceCompat) {
+                setSwitchPreferenceSummary(sharedPreferences, p.getKey());
             }
-        });
-
-//        SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
-//        PreferenceScreen prefScreen = getPreferenceScreen();
-//        int count = prefScreen.getPreferenceCount();
-//        for (int i = 0; i < count; i++) {
-//            Preference p = prefScreen.getPreference(i);
-//            if (!(p instanceof CheckBoxPreference) || !(p instanceof Sha)) {
-//
-//                String value = sharedPreferences.getString(p.getKey(), "fontSize");
-//                setPreferenceSummary(p, value);
-//
-//            }
-//        }
+        }
     }
-
-//    private void showBackgroundColourPickerDialog() {
-//        new ColorDialog.Builder(getActivity().getBaseContext())
-//                .setColorShape(ColorShape.CIRCLE) //CIRCLE or SQUARE
-//                .setTag(BACKGROUND_COLOUR_PICKER_PREFERENCE_TAG) // tags can be useful when multiple components use the picker within an activity
-//                .show();
-//
-//    }
-
-//    private void showFontColourPickerDialog() {
-//        new ColorDialog.Builder(this)
-//                .setColorShape(ColorShape.CIRCLE) //CIRCLE or SQUARE
-//                .setTag(FONT_COLOUR_PICKER_PREFERENCE_TAG) // tags can be useful when multiple components use the picker within an activity
-//                .show();
-//    }
 
 
     @Override
     public void onStop() {
         super.onStop();
+
+        SharedPreferences coloursPreference = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        SharedPreferences.Editor prefEditor = coloursPreference.edit();
+
+        prefEditor.putInt("fontSize", mFontSize);
+        prefEditor.putBoolean("mirrorMode", mMirrorModeOn);
+        prefEditor.apply();
+
         /* Unregister the preference change listener */
         getPreferenceScreen().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
@@ -93,11 +80,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         /* Register the preference change listener */
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
+//        SharedPreferences colourPrefs = getActivity().getSharedPreferences("coloursPrefs", Context.MODE_PRIVATE);
+//        mFontColour = colourPrefs.getInt("fontColour", R.color.font_default_colour);
+//        mBackgroundColour = colourPrefs.getInt("backgroundColour", R.color.background_default_colour);
+
     }
 
     private void setPreferenceSummary(Preference preference, Object value) {
         String stringValue = value.toString();
-        String key = preference.getKey();
 
         if (preference instanceof ListPreference) {
             /* For list preferences, look up the correct display value in */
@@ -107,6 +97,19 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             if (prefIndex >= 0) {
                 preference.setSummary(listPreference.getEntries()[prefIndex]);
             }
+            switch (stringValue) {
+                case "10":
+                    mFontSize = 10;
+                    break;
+                case "30":
+                    mFontSize = 30;
+                    break;
+                case "60":
+                    mFontSize = 60;
+                    break;
+                default:
+                    mFontSize = 30;
+            }
         } else {
             // For other preferences, set the summary to the value's simple string representation.
             preference.setSummary(stringValue);
@@ -115,11 +118,33 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Preference p = findPreference(key);
+        if (p instanceof ListPreference) {
+            setPreferenceSummary(p, sharedPreferences.getString(key, ""));
+        } else if(p instanceof SwitchPreferenceCompat){
+            setSwitchPreferenceSummary(sharedPreferences, key);
+        }
+    }
 
+    private void setSwitchPreferenceSummary(SharedPreferences sharedPreferences, String key) {
+        Preference p = findPreference(key);
+        if (sharedPreferences.getBoolean(key, false)) {
+            p.setSummary(R.string.pref_mirrorMode_summary_on);
+            mMirrorModeOn = true;
+        } else {
+            p.setSummary(R.string.pref_mirrorMode_summary_off);
+            mMirrorModeOn = false;
+        }
     }
 
     @Override
-    public void onColorSelected(int i, String s) {
+    public boolean onPreferenceClick(Preference preference) {
+        if (preference.getKey().equals(getResources().getString(R.string.pref_display_colour_key))) {
 
+
+            return true;
+        }
+
+        return false;
     }
 }

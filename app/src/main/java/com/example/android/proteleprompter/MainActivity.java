@@ -6,8 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -26,7 +29,7 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener {
 
     private static Context mContext;
-    private MainFragment mFragmant;
+    private MainFragment mFragment;
 
     private static final int READ_REQUEST_CODE = 39;
 
@@ -36,9 +39,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         setContentView(R.layout.activity_main);
         mContext = getApplicationContext();
 
-        mFragmant = new MainFragment();
+        mFragment = new MainFragment();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainFragment_container, mFragmant)
+                .replace(R.id.mainFragment_container, mFragment)
                 .commit();
 
 
@@ -47,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
             @Override
             public void onClick(View view) {
                 performFileSearch();
-                //openFileExplorer();
             }
         });
 
@@ -93,8 +95,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
 
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
-        intent.setType("*/*");
-
         String[] mimeTypes = {"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 "text/plain",
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -106,9 +106,10 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                 "application/x-rtf",
                 "text/richtext",
                 "application/vnd.google-apps.document",
+                "application/pdf",
                 "text/rtf"};
 
-        //intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        intent.setType("text/plain");
 
         startActivityForResult(intent, READ_REQUEST_CODE);
 
@@ -135,28 +136,28 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                 String fileTime = df.format(c.getTime());
 
-                String fileText = "";
+                String fileText = readTextFromTxtFile(fileImportedUri);
 
                 //TODO: txt is working well, next mission is google document
-                switch (fileType) {
-                    case "txt":
-                        fileText = readTextFromTxtFile(fileImportedUri);
-                        break;
-                    case "rtf":
-                        fileText = readTextFromRtfFile();
-                        break;
-                    case "pdf":
-                        fileText = readTextFromPdfFile(fileImportedUri);
-                        break;
-                    case "doc":
-                        fileText = readTextFromDocFile(fileImportedUri);
-                        break;
-                    case "ppt":
-                        fileText = readTextFromPptFile();
-                        break;
-                    default:
-                        fileText = readTextFromTxtFile(fileImportedUri);
-                }
+//                switch (fileType) {
+//                    case "txt":
+//                        fileText = readTextFromTxtFile(fileImportedUri);
+//                        break;
+//                    case "rtf":
+//                        fileText = readTextFromRtfFile();
+//                        break;
+//                    case "pdf":
+//                        fileText = readTextFromPdfFile(fileImportedUri);
+//                        break;
+//                    case "doc":
+//                        fileText = readTextFromDocFile(fileImportedUri);
+//                        break;
+//                    case "ppt":
+//                        fileText = readTextFromPptFile();
+//                        break;
+//                    default:
+//                        fileText = readTextFromTxtFile(fileImportedUri);
+//                }
 
                 ContentValues fileValue = new ContentValues();
 
@@ -170,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
 
             }
             returnCursor.close();
-            mFragmant.updateAdapter();
+            mFragment.updateAdapter();
         }
     }
 
@@ -214,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     }
 
     private String readTextFromDocFile(Uri pdfuri) {
+
 
         String docText = "";
 

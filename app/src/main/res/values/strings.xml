@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">ProTeleprompter</string>
     <string name="action_settings">Settings</string>
+    <string name="action_colours_settings">Colours Settings</string>
 
     <string name="error_message_loading_users">There seems to have been some error.</string>
     <string name="default_message_loading_users">Loading</string>
@@ -39,8 +40,8 @@
     <string name="pref_font_size_option_normal">Normal</string>
     <string name="pref_font_size_option_large">Large</string>
 
-    <string name="pref_font_size_value_small">20</string>
-    <string name="pref_font_size_value_normal">40</string>
+    <string name="pref_font_size_value_small">10</string>
+    <string name="pref_font_size_value_normal">30</string>
     <string name="pref_font_size_value_large">60</string>
 
 
@@ -54,6 +55,9 @@
     <string name="pref_scrollingSpeed_key">scrollSpeed</string>
 
     <string name="pref_display_colour_header">Display colour settings</string>
+    <string name="pref_display_colour_key">DisplayedColourSettings</string>
+    <string name="pref_display_colour_summary">Font and Background colours</string>
+
 
     <string name="pref_display_font_colour_title">Font colour</string>
     <string name="pref_display_font_colour_key">fontColour</string>
@@ -63,5 +67,19 @@
     <string name="pref_display_background_colour_key">backgroundColour</string>
     <string name="pref_display_background_colour_summary">Define scrolling background colour</string>
 
+    <string name="pref_scrolling_speed_key">scrollingSpeed</string>
+    <string name="pref_scrolling_speed_summary">Adjust teleprompter scrolling speed</string>
+    <string name="pref_scrolling_speed_title">Scrolling Speed</string>
+
+    <string-array name="slider_summaries">
+        <!-- You can define as many summaries as you'd like -->
+        <!-- The active summary will reflect the preference's current value -->
+        <item>Slow</item> <!-- 0.00 to 0.25 -->
+        <item>Normal</item>   <!-- 0.25 to 0.50 -->
+        <item>Brisk</item>     <!-- 0.50 to 0.75 -->
+        <item>Fast</item>  <!-- 0.75 to 1.00 -->
+    </string-array>
+    <item name="slider_default" format="float" type="string">0.5</item>
+    <string name="slider_message">Optional message displayed in the dialog above the slider</string>
 
 </resources>

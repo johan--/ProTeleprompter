@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ListPreference
         android:defaultValue="@string/pref_font_size_option_default"
@@ -14,10 +15,8 @@
         android:title="@string/pref_mirrorMode_title"
         android:summary="@string/pref_mirrorMode_summary_off"/>
 
-    <Preference android:title="@string/pref_display_colour_header">
-        <intent android:action="android.intent.action.SYNC_SETTING"/>
-    </Preference>
-
-
+    <Preference
+        android:title="@string/pref_display_colour_header"
+        android:key="@string/pref_display_colour_key" />
 
 </PreferenceScreen>

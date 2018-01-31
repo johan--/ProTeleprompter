@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import com.kizitonwose.colorpreference.ColorDialog;
 
 
-public class SettingActivity extends AppCompatActivity implements ColorDialog.OnColorSelectedListener{
+public class SettingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,6 @@ public class SettingActivity extends AppCompatActivity implements ColorDialog.On
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -33,10 +32,5 @@ public class SettingActivity extends AppCompatActivity implements ColorDialog.On
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onColorSelected(int i, String s) {
-
     }
 }

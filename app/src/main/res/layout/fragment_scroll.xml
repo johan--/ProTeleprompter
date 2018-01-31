@@ -35,6 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="@dimen/vertical_margin"
+                android:textSize="40sp"
                 android:text="@string/test_text__scrollView"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
@@ -86,7 +87,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:mode="playToPause" />
+                app:mode="playToStop"/>
 
             <TextView
                 android:id="@+id/tv_timer"

@@ -23,7 +23,7 @@ import java.util.List;
 
 public class DocumentAdaptor extends CursorRecyclerViewAdapter {
 
-    private List<Document> mDocumentList = new ArrayList<>();
+    public List<Document> mDocumentList = new ArrayList<>();
 
     private Document mDocument;
 
@@ -72,7 +72,7 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
 
     private void openScrollingActivity(documentsListViewHolder vh){
 
-        Document document = mDocumentList.get(vh.getAdapterPosition());
+        Document document = mDocumentList.get(vh.getLayoutPosition());
 
         Class mScrollActivity = ScrollActivity.class;
 
