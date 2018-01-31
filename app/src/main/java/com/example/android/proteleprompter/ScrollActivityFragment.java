@@ -2,7 +2,6 @@ package com.example.android.proteleprompter;
 
 import android.Manifest;
 import android.animation.ObjectAnimator;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -11,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -19,7 +17,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,14 +30,16 @@ import android.widget.TextView;
 import com.example.android.proteleprompter.Data.Document;
 import com.example.android.proteleprompter.Utilities.CameraView;
 import com.example.android.proteleprompter.Utilities.CustomImagebutton;
+import com.example.android.proteleprompter.Utilities.TeleprompterPreference;
 
 import be.rijckaert.tim.animatedvector.FloatingMusicActionButton;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ScrollActivityFragment extends Fragment{
+public class ScrollActivityFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private static boolean PREFERENCE_HAS_BEEN_UPDATED;
     private ScrollView sv_scrollView;
     private FrameLayout fl_cameraFrame;
     private FloatingMusicActionButton fmab_ScrollSwitch;
@@ -95,6 +94,8 @@ public class ScrollActivityFragment extends Fragment{
             mDocumentContentUri = Uri.parse(mDocument.documentUri);
             mDocumentContent = mDocument.text;
         }
+        android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -162,18 +163,18 @@ public class ScrollActivityFragment extends Fragment{
     @Override
     public void onStart() {
         super.onStart();
-        updateViews();
+
+        if (PREFERENCE_HAS_BEEN_UPDATED) {
+            updateViews();
+        }
+
     }
 
-    private void updateViews(){
+    private void updateViews() {
+
         getStoredSettingAttrs();
 
-
         tv_scrollContentView.setTextSize(mFontSize);
-
-//        tv_scrollContentView.setTextColor(mFontColour);
-//        tv_scrollContentView.setBackgroundColor(mBackgroundColour);
-
 
     }
 
@@ -212,6 +213,8 @@ public class ScrollActivityFragment extends Fragment{
         tv_scrollContentView.setText(mDocumentContent);
         fmab_ScrollSwitch.changeMode(FloatingMusicActionButton.Mode.PLAY_TO_STOP);
 
+        updateViews();
+
     }
 
     private void startScrollCountDown() {
@@ -230,7 +233,7 @@ public class ScrollActivityFragment extends Fragment{
 
         mStopWatchHandler = new Handler();
 
-        mStopWatchRunnable = new Runnable(){
+        mStopWatchRunnable = new Runnable() {
             @Override
             public void run() {
 
@@ -305,12 +308,12 @@ public class ScrollActivityFragment extends Fragment{
         fl_cameraFrame.setVisibility(View.INVISIBLE);
     }
 
-    private void getStoredSettingAttrs(){
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        mFontSize = sharedPreferences.getInt("fontSize", 30);
-        mMirrorModeOn = sharedPreferences.getBoolean("mirrorMode", false);
-        mFontColour = sharedPreferences.getInt("fontColour", R.color.font_default_colour);
-        mBackgroundColour = sharedPreferences.getInt("backgroundColour", R.color.background_default_colour);
+    private void getStoredSettingAttrs() {
+
+        mFontSize = TeleprompterPreference.getPreferredFontSize(getActivity());
+        mMirrorModeOn = TeleprompterPreference.getMirrorIsOn(getActivity());
+        mFontColour = TeleprompterPreference.getPreferredFontColour(getActivity());
+        mBackgroundColour = TeleprompterPreference.getPreferredBackgroundColour(getActivity());
     }
 
     /**
@@ -391,6 +394,7 @@ public class ScrollActivityFragment extends Fragment{
         if (stopWatch_wasRunning) {
             stopWatch_running = true;
         }
+
     }
 
     @Override
@@ -399,10 +403,11 @@ public class ScrollActivityFragment extends Fragment{
         if (mCamera != null) mCamera.stopPreview();
         stopWatch_wasRunning = stopWatch_running;
         stopWatch_running = false;
-        if(mCamera != null) mCamera.release();
+        if (mCamera != null) mCamera.release();
         mStopWatchHandler.removeCallbacks(mStopWatchRunnable);
 
         fmab_ScrollSwitch.clearAnimation();
+
 
         super.onStop();
     }
@@ -412,6 +417,14 @@ public class ScrollActivityFragment extends Fragment{
     public void onDestroy() {
 
         super.onDestroy();
+
+        android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        PREFERENCE_HAS_BEEN_UPDATED = true;
     }
 }
 

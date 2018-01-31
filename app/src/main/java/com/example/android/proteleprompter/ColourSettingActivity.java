@@ -84,7 +84,7 @@ public class ColourSettingActivity extends AppCompatActivity implements ColorDia
 
         showFontColourPickerDialog(tag);
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
 
         SharedPreferences.Editor prefEditor = sharedPref.edit();
 

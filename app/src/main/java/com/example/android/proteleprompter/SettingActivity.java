@@ -1,12 +1,8 @@
 package com.example.android.proteleprompter;
 
-
-
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-
-import com.kizitonwose.colorpreference.ColorDialog;
 
 
 public class SettingActivity extends AppCompatActivity {

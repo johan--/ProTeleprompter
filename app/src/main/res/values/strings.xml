@@ -40,9 +40,9 @@
     <string name="pref_font_size_option_normal">Normal</string>
     <string name="pref_font_size_option_large">Large</string>
 
-    <string name="pref_font_size_value_small">10</string>
+    <string name="pref_font_size_value_small">20</string>
     <string name="pref_font_size_value_normal">30</string>
-    <string name="pref_font_size_value_large">60</string>
+    <string name="pref_font_size_value_large">40</string>
 
 
     <string name="pref_mirrorMode_title">Mirror mode</string>
