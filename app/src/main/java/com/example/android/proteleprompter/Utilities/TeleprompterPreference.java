@@ -72,7 +72,6 @@ public class TeleprompterPreference {
 
         backgroundColour = prefs.getInt(keyForBackgroundColour, R.color.background_default_colour);
 
-
         return backgroundColour;
     }
 }

@@ -2,6 +2,7 @@ package com.example.android.proteleprompter;
 
 import android.Manifest;
 import android.animation.ObjectAnimator;
+import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -53,7 +54,7 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
     private Document mDocument;
     private Uri mDocumentContentUri;
     private String mDocumentContent;
-    private long mScrollDuration;
+    private long mScrollSpeed;
     private long mCurrentPlayTime;
 
     private final String TAG = "ScrollFragment";
@@ -72,7 +73,9 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
     private int mBackgroundColour;
 
     private Handler mStopWatchHandler;
+    private Handler mScrollingHandler;
     private Runnable mStopWatchRunnable;
+    private Runnable mScrollingRunnable;
 
     private ObjectAnimator mObjectAnimator;
 
@@ -80,7 +83,6 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
     }
 
 
-    //TODO: retrieve document data from intent
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,22 +113,20 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
 
         initViews(root);
 
-        stopWatch_running = true;
-
-        mScrollDuration = 50000;
-
-        startScrollCountDown();
-
-        startStopWatch();
-
-        startScrolling(mScrollDuration);
-
         fmab_ScrollSwitch.setOnMusicFabClickListener(new FloatingMusicActionButton.OnMusicFabClickListener() {
             @Override
             public void onClick(View view) {
-                if (scrolling_running)
+
+//                mTextLines = tv_scrollContentView.getLineCount();
+//                mScrollDuration = mTextLines * 1700;
+
+                if (scrolling_running) {
                     stopScrolling();
-                else restartScrolling();
+                    stopStopWatch();
+                } else {
+                    startScrolling();
+                    startStopWatch();
+                }
             }
         });
 
@@ -161,24 +161,6 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-        if (PREFERENCE_HAS_BEEN_UPDATED) {
-            updateViews();
-        }
-
-    }
-
-    private void updateViews() {
-
-        getStoredSettingAttrs();
-
-        tv_scrollContentView.setTextSize(mFontSize);
-
-    }
-
-    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_scroll, menu);
@@ -206,10 +188,9 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
         tv_timer = root.findViewById(R.id.tv_timer);
         ib_cameraSwitch = root.findViewById(R.id.ib_cameraSwitch);
         mLayout = root.findViewById(R.id.scroll_layout);
-
         fl_cameraFrame = root.findViewById(R.id.cameraScreen);
-        fl_cameraFrame.setVisibility(View.INVISIBLE);
 
+        fl_cameraFrame.setVisibility(View.INVISIBLE);
         tv_scrollContentView.setText(mDocumentContent);
         fmab_ScrollSwitch.changeMode(FloatingMusicActionButton.Mode.PLAY_TO_STOP);
 
@@ -217,6 +198,24 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
 
     }
 
+    //TODO: mirror mode need to be done, add one more option to make users choose horizon or vertical mirror,
+    // vertical mirror mode should let users scroll from bottom to top
+    private void updateViews() {
+
+        getStoredSettingAttrs();
+
+        tv_scrollContentView.setTextSize(mFontSize);
+        tv_scrollContentView.setTextColor(mFontColour);
+        tv_scrollContentView.setBackgroundColor(mBackgroundColour);
+        if (mMirrorModeOn) {
+            tv_scrollContentView.setScaleY(-1);
+        } else {
+            tv_scrollContentView.setScaleY(1);
+        }
+
+    }
+
+    //TODO: 3s count down is not displayed, thinking if it is necessary for this app
     private void startScrollCountDown() {
         new CountDownTimer(4000, 1000) {
             public void onTick(long millisUntilFinished) {
@@ -232,6 +231,8 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
     private void startStopWatch() {
 
         mStopWatchHandler = new Handler();
+
+        stopWatch_running = true;
 
         mStopWatchRunnable = new Runnable() {
             @Override
@@ -252,36 +253,44 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
             }
         };
 
-
-        mStopWatchHandler.postDelayed(mStopWatchRunnable, 3000);
+        mStopWatchHandler.postDelayed(mStopWatchRunnable, 0);
     }
 
-    private void startScrolling(final long duration) {
+    private void stopStopWatch() {
 
-        mObjectAnimator = new ObjectAnimator();
-        new Handler().postDelayed(new Runnable() {
+        stopWatch_wasRunning = stopWatch_running;
+
+        if (stopWatch_running) mStopWatchHandler.removeCallbacks(mStopWatchRunnable);
+
+        stopWatch_running = false;
+    }
+
+    private void startScrolling() {
+
+        scrolling_running = true;
+
+        mScrollingHandler = new Handler();
+
+        mScrollingRunnable = new Runnable() {
+            @Override
             public void run() {
-                //TODO: duration is not exactly same as stopwatch time,
-                // about 5-20s difference depending on duration, needs to be fixed
-                scrolling_running = true;
-                mObjectAnimator = ObjectAnimator.ofInt(sv_scrollView, "scrollY", tv_scrollContentView.getBottom()).setDuration(duration);
-                mObjectAnimator.start();
-                fmab_ScrollSwitch.changeMode(FloatingMusicActionButton.Mode.PAUSE_TO_PLAY);
-
-                //mScrollingHandler.postDelayed(this, 100);
-
-
+                //TODO: need modification, not very right
+                sv_scrollView.smoothScrollBy(0, 1);        // 5 is how many pixels you want it to scroll vertically by
+                mScrollingHandler.postDelayed(this, 25);     // 10 is how many milliseconds you want this thread to run
             }
-        }, 3000);
+        };
+        mScrollingHandler.postDelayed(mScrollingRunnable, 0);
 
-//        mScrollingHandler = new Handler();
-//        mScrollingHandler.post(mScrollingRunnable);
+
     }
+
 
     private void stopScrolling() {
-        mCurrentPlayTime = mObjectAnimator.getCurrentPlayTime();
+
+        if (scrolling_running) mScrollingHandler.removeCallbacks(mScrollingRunnable);
+
         scrolling_running = false;
-        mObjectAnimator.cancel();
+
     }
 
     private void restartScrolling() {
@@ -386,7 +395,6 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
         savedInstanceState.putBoolean("wasRunning", stopWatch_wasRunning);
     }
 
-    //TODO: app will crash when fragment is destroyed because of run background thread
     @Override
     public void onResume() {
         super.onResume();
@@ -395,23 +403,26 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
             stopWatch_running = true;
         }
 
+        if (PREFERENCE_HAS_BEEN_UPDATED) {
+            updateViews();
+        }
+        fmab_ScrollSwitch.changeMode(FloatingMusicActionButton.Mode.PLAY_TO_PAUSE);
+
     }
 
     @Override
     public void onStop() {
 
         if (mCamera != null) mCamera.stopPreview();
-        stopWatch_wasRunning = stopWatch_running;
-        stopWatch_running = false;
         if (mCamera != null) mCamera.release();
-        mStopWatchHandler.removeCallbacks(mStopWatchRunnable);
+
+        if (scrolling_running) stopScrolling();
+        if (stopWatch_running) stopStopWatch();
 
         fmab_ScrollSwitch.clearAnimation();
 
-
         super.onStop();
     }
-
 
     @Override
     public void onDestroy() {
