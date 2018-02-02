@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -20,9 +21,9 @@ public class ScrollActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scroll);
 
         mDocument = (Document) this.getIntent().getBundleExtra("bundle").getSerializable("document");
-        if(mDocument !=null) {
-            int dotIndex = mDocument.title.lastIndexOf(".");
-            mDocumentTitle = mDocument.title.substring(0, dotIndex);
+        if (mDocument != null) {
+
+            mDocumentTitle = mDocument.title;
         }
 
         ActionBar actionBar = getSupportActionBar();
@@ -32,12 +33,22 @@ public class ScrollActivity extends AppCompatActivity {
                 ActionBar.LayoutParams.WRAP_CONTENT,
                 ActionBar.LayoutParams.MATCH_PARENT,
                 Gravity.CENTER);
-        TextView textViewTitle =  viewActionBar.findViewById(R.id.toolBar_title);
+        TextView textViewTitle = viewActionBar.findViewById(R.id.toolBar_title);
         textViewTitle.setText(mDocumentTitle);
         actionBar.setCustomView(viewActionBar, params);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

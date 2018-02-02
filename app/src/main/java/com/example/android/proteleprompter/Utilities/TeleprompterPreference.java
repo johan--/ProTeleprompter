@@ -74,4 +74,17 @@ public class TeleprompterPreference {
 
         return backgroundColour;
     }
+
+    public static int getPreferredScrollingSpeed(Context context) {
+        int scrollingSpeed;
+
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(context);
+
+        String keyForScrollingSpeed = context.getString(R.string.pref_scrolling_speed_key);
+
+        scrollingSpeed = prefs.getInt(keyForScrollingSpeed, R.integer.pref_scrolling_speed_default);
+
+        return scrollingSpeed;
+    }
 }

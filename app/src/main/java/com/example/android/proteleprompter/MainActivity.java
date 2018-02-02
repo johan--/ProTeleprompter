@@ -126,7 +126,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
 
             if (returnCursor != null && returnCursor.moveToFirst()) {
                 int fileNameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                String fileName = returnCursor.getString(fileNameIndex);
+                String fileNameWithExtension = returnCursor.getString(fileNameIndex);
+                String fileName = fileNameWithExtension.substring(0, fileNameWithExtension.lastIndexOf("."));
 
                 ContentResolver cR = MainActivity.getmContext().getContentResolver();
                 MimeTypeMap mime = MimeTypeMap.getSingleton();

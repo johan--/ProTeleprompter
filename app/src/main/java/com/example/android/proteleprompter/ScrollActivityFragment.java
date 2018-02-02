@@ -54,7 +54,7 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
     private Document mDocument;
     private Uri mDocumentContentUri;
     private String mDocumentContent;
-    private long mScrollSpeed;
+    private int mScrollSpeed;
     private long mCurrentPlayTime;
 
     private final String TAG = "ScrollFragment";
@@ -124,7 +124,7 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
                     stopScrolling();
                     stopStopWatch();
                 } else {
-                    startScrolling();
+                    startScrolling(mScrollSpeed);
                     startStopWatch();
                 }
             }
@@ -265,7 +265,7 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
         stopWatch_running = false;
     }
 
-    private void startScrolling() {
+    private void startScrolling(final int speed) {
 
         scrolling_running = true;
 
@@ -276,7 +276,7 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
             public void run() {
                 //TODO: need modification, not very right
                 sv_scrollView.smoothScrollBy(0, 1);        // 5 is how many pixels you want it to scroll vertically by
-                mScrollingHandler.postDelayed(this, 25);     // 10 is how many milliseconds you want this thread to run
+                mScrollingHandler.postDelayed(this, speed);     // 10 is how many milliseconds you want this thread to run
             }
         };
         mScrollingHandler.postDelayed(mScrollingRunnable, 0);
@@ -323,6 +323,7 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
         mMirrorModeOn = TeleprompterPreference.getMirrorIsOn(getActivity());
         mFontColour = TeleprompterPreference.getPreferredFontColour(getActivity());
         mBackgroundColour = TeleprompterPreference.getPreferredBackgroundColour(getActivity());
+        mScrollSpeed = TeleprompterPreference.getPreferredScrollingSpeed(getActivity());
     }
 
     /**

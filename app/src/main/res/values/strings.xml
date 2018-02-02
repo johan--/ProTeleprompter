@@ -63,13 +63,30 @@
     <string name="pref_display_font_colour_key">fontColour</string>
     <string name="pref_display_font_colour_summary">Define scrolling text colour</string>
 
+
     <string name="pref_display_background_colour_title">Background colour</string>
     <string name="pref_display_background_colour_key">backgroundColour</string>
     <string name="pref_display_background_colour_summary">Define scrolling background colour</string>
 
+
     <string name="pref_scrolling_speed_key">scrollingSpeed</string>
     <string name="pref_scrolling_speed_summary">Adjust teleprompter scrolling speed</string>
     <string name="pref_scrolling_speed_title">Scrolling Speed</string>
+    <string name="pref_scrolling_speed_default">Normal</string>
+
+    <string name="pref_scrolling_speed_option_lazy">Lazy</string>
+    <string name="pref_scrolling_speed_option_slow">Slow</string>
+    <string name="pref_scrolling_speed_option_normal">Normal</string>
+    <string name="pref_scrolling_speed_option_fast">Fast</string>
+    <string name="pref_scrolling_speed_option_high_speed">High-speed</string>
+
+    <string name="pref_scrolling_speed_value_lazy">Lazy</string>
+    <string name="pref_scrolling_speed_value_slow">Slow</string>
+    <string name="pref_scrolling_speed_value_normal">Normal</string>
+    <string name="pref_scrolling_speed_value_fast">Fast</string>
+    <string name="pref_scrolling_speed_value_high_speed">High-speed</string>
+
+
 
     <string-array name="slider_summaries">
         <!-- You can define as many summaries as you'd like -->

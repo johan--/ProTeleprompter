@@ -3,6 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ListPreference
+        android:defaultValue="@string/pref_scrolling_speed_default"
+        android:title="@string/pref_scrolling_speed_title"
+        android:key="@string/pref_scrolling_speed_key"
+        android:entries="@array/pref_scrolling_speed_options"
+        android:entryValues="@array/pref_scrolling_speed_values"/>
+
+
+    <ListPreference
         android:defaultValue="@string/pref_font_size_option_default"
         android:entries="@array/pref_font_size_options"
         android:entryValues="@array/pref_font_size_values"
