@@ -83,8 +83,33 @@ public class TeleprompterPreference {
 
         String keyForScrollingSpeed = context.getString(R.string.pref_scrolling_speed_key);
 
-        scrollingSpeed = prefs.getInt(keyForScrollingSpeed, R.integer.pref_scrolling_speed_default);
+        String defaultFont = context.getString(R.string.pref_scrolling_speed_default);
+        String value = prefs.getString(keyForScrollingSpeed, defaultFont);
 
+        switch (value) {
+            case "Lazy": {
+                scrollingSpeed = 40;
+                break;
+            }
+            case "Slow": {
+                scrollingSpeed = 30;
+                break;
+            }
+            case "Normal": {
+                scrollingSpeed = 25;
+                break;
+            }
+            case "Fast": {
+                scrollingSpeed = 20;
+                break;
+            }
+            case "High-speed": {
+                scrollingSpeed = 15;
+                break;
+            }
+            default:
+                scrollingSpeed = 25;
+        }
         return scrollingSpeed;
     }
 }
