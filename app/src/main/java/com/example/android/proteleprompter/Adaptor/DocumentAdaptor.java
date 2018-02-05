@@ -1,7 +1,10 @@
 package com.example.android.proteleprompter.Adaptor;
 
 
+import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -10,6 +13,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +33,8 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
     private Document mDocument;
 
     private Context mContext;
+
+    private OnEditOrDeleteFilesListener mListener;
 
     public DocumentAdaptor(Context context, Cursor cursor) {
         super(context, cursor);
@@ -66,11 +73,15 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, Cursor cursor) {
         documentsListViewHolder holder = (documentsListViewHolder) viewHolder;
         cursor.moveToPosition(cursor.getPosition());
-        holder.setData(cursor);
+        holder.setDataForViews(cursor);
         mDocumentList.add(mDocument);
     }
 
-    private void openScrollingActivity(documentsListViewHolder vh){
+    public void setOnEditFilesListener(OnEditOrDeleteFilesListener listener) {
+        mListener = listener;
+    }
+
+    private void openScrollingActivity(documentsListViewHolder vh) {
 
         Document document = mDocumentList.get(vh.getLayoutPosition());
 
@@ -92,29 +103,66 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
         TextView fileTitle_tv;
         TextView fileOpenTime_tv;
         ImageView fileTypeImage_iv;
+        ImageButton editButton_ib;
+        ImageButton deleteButton_ib;
 
         public documentsListViewHolder(View view) {
             super(view);
             fileTitle_tv = view.findViewById(R.id.tv_fileTitle);
             fileOpenTime_tv = view.findViewById(R.id.tv_fileOpenTime);
             fileTypeImage_iv = view.findViewById(R.id.iv_fileTypeIcon);
+            editButton_ib = view.findViewById(R.id.image_btn_edit);
+            deleteButton_ib = view.findViewById(R.id.image_btn_delete);
 
         }
 
-        private void setDocumentData(Cursor c){
-            mDocument = new Document();
-            mDocument.title = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_NAME));
-            mDocument.documentType = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_TYPE));
-            mDocument.time = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_LASTOPENTIME));
-            mDocument.text = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_CONTENT));
-            mDocument.documentUri = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_URI));
-        }
+        public void setDataForViews(final Cursor c) {
 
-        public void setData(Cursor c) {
+            final String fileName = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_NAME));
+            final String fileOpenTime = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_LASTOPENTIME));
+            final String fileContent = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_CONTENT));
+            final String fileType = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_TYPE));
+            final String fileUri = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_URI));
+            final String fileID = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry._ID));
 
-            fileTitle_tv.setText(c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_NAME)));
-            fileOpenTime_tv.setText(c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_LASTOPENTIME)));
-            String fileType = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_TYPE));
+            fileTitle_tv.setText(fileName);
+            fileOpenTime_tv.setText(fileOpenTime);
+
+            editButton_ib.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    renameFileNameDialog(fileTitle_tv, fileID);
+
+                }
+            });
+
+            deleteButton_ib.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder alertBuild = new AlertDialog.Builder(mContext);
+
+                    alertBuild.setTitle(R.string.delete_dialog_title)
+                            .setMessage(String.format(mContext.getString(R.string.delete_dialog_message),
+                                    mDocumentList.get(Integer.parseInt(fileID)-1).title));
+
+                    alertBuild.setPositiveButton(R.string.delete_dialog_positive_button, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            deleteFiles(fileID);
+                        }
+                    });
+
+                    alertBuild.setNegativeButton(R.string.delete_dialog_negatibe_button, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //Nothing happens, just close dialog
+                        }
+                    });
+                    AlertDialog dialog = alertBuild.create();
+                    dialog.show();
+                }
+            });
 
             int typeImageId;
             switch (fileType) {
@@ -151,6 +199,71 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
             setDocumentData(c);
         }
 
+        private void setDocumentData(Cursor c) {
+            mDocument = new Document();
+            mDocument.title = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_NAME));
+            mDocument.documentType = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_TYPE));
+            mDocument.time = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_LASTOPENTIME));
+            mDocument.text = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_CONTENT));
+            mDocument.documentUri = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_URI));
+        }
+    }
+
+    private void deleteFiles(String id) {
+        String selection = DocumentContract.DocumentEntry._ID + " =?";
+        String[] selectionArgs = {id};
+        mContext.getContentResolver().delete(DocumentContract.DocumentEntry.CONTENT_URI, selection, selectionArgs);
+        mListener.onFilesListenerInteraction();
+    }
+
+    private void renameFileNameDialog(final TextView tv, final String id) {
+        final EditText editText = new EditText(mContext);
+
+        editText.setSingleLine(true);
+        editText.setText(tv.getText());
+
+        int FileListIndex = Integer.parseInt(id);
+
+        final Document selectedDocument = mDocumentList.get(FileListIndex-1);
+
+        AlertDialog.Builder alertBuild = new AlertDialog.Builder(mContext);
+
+        alertBuild.setTitle(R.string.edit_file_name_title)
+                .setView(editText);
+
+        alertBuild.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String newName = editText.getText().toString();
+                tv.setText(newName);
+                selectedDocument.title = newName;
+                ContentValues fileValue = new ContentValues();
+                fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_NAME, selectedDocument.title);
+                fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_TYPE, selectedDocument.documentType);
+                fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_LASTOPENTIME, selectedDocument.time);
+                fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_CONTENT, selectedDocument.text);
+                fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_URI, selectedDocument.documentUri);
+
+                String selection = DocumentContract.DocumentEntry._ID + " =?";
+                String[] selectionArgs = {id};
+
+                mContext.getContentResolver().update(DocumentContract.DocumentEntry.CONTENT_URI, fileValue, selection, selectionArgs);
+            }
+        });
+
+        alertBuild.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Nothing happens, just close dialog
+            }
+        });
+        AlertDialog dialog = alertBuild.create();
+        dialog.show();
+
+    }
+
+    public interface OnEditOrDeleteFilesListener {
+        void onFilesListenerInteraction();
     }
 }
 

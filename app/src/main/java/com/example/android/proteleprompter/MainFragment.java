@@ -36,7 +36,7 @@ import java.util.List;
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -106,6 +106,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
         mDocument_list_rv = root.findViewById(R.id.rv_list);
 
+
         return root;
 
     }
@@ -115,6 +116,12 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         super.onActivityCreated(savedInstanceState);
         getLoaderManager().initLoader(INIT_CURSOR_ID, null, this);
         setUpListOfDocumentListView(mDocument_list_rv);
+        mAdaptor.setOnEditFilesListener(new DocumentAdaptor.OnEditOrDeleteFilesListener() {
+            @Override
+            public void onFilesListenerInteraction() {
+                updateAdapter();
+            }
+        });
     }
 
     private void setUpListOfDocumentListView(RecyclerView documentListView) {

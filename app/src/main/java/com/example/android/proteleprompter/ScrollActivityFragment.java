@@ -2,7 +2,6 @@ package com.example.android.proteleprompter;
 
 import android.Manifest;
 import android.animation.ObjectAnimator;
-import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;

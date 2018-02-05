@@ -23,7 +23,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         for (int i = 0; i < count; i++) {
             Preference p = prefScreen.getPreference(i);
 
-            if (i == 2) {
+            if (i == count - 1) {
                 p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {

@@ -86,6 +86,13 @@
     <string name="pref_scrolling_speed_value_fast">Fast</string>
     <string name="pref_scrolling_speed_value_high_speed">High-speed</string>
 
+    <string name="delete_dialog_title">Delete confirm</string>
+    <string name="delete_dialog_message">%s will be deleted from your teleprompter.</string>
+    <string name="delete_dialog_positive_button">Delete</string>
+    <string name="delete_dialog_negatibe_button">Cancel</string>
+
+    <string name="edit_file_name_title">Rename document</string>
+
 
 
     <string-array name="slider_summaries">

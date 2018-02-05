@@ -17,16 +17,23 @@
 
     <TextView
         android:id="@+id/tv_fileTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/horizon_margin"
         android:layout_marginStart="@dimen/horizon_margin"
+        android:layout_marginEnd="@dimen/horizon_file_name_right_margin"
+        android:layout_marginRight="@dimen/horizon_file_name_right_margin"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
         android:textColor="@android:color/black"
         android:textSize="@dimen/heading_font_size"
         app:layout_constraintLeft_toRightOf="@id/iv_fileTypeIcon"
+        app:layout_constraintRight_toLeftOf="@+id/image_btn_edit"
         app:layout_constraintTop_toTopOf="@+id/iv_fileTypeIcon"
-        tools:text="111111" />
+        tools:text="2222222222222222222222222222"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:singleLine="true"
+         />
 
     <TextView
         android:id="@+id/tv_fileOpenTime"
