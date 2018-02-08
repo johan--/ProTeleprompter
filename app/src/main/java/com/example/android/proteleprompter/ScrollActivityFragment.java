@@ -129,7 +129,7 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
             }
         });
 
-        //TODO: camera permission have issues, after clicking allow, camera won't open until press button again
+
         ib_cameraSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,9 +189,16 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
         mLayout = root.findViewById(R.id.scroll_layout);
         fl_cameraFrame = root.findViewById(R.id.cameraScreen);
 
+
         fl_cameraFrame.setVisibility(View.INVISIBLE);
         tv_scrollContentView.setText(mDocumentContent);
         fmab_ScrollSwitch.changeMode(FloatingMusicActionButton.Mode.PLAY_TO_STOP);
+
+        int hours = stopWatch_seconds / 3600;
+        int minutes = (stopWatch_seconds % 3600) / 60;
+        int secs = stopWatch_seconds % 60;
+        String time = String.format(getString(R.string.timer_time), hours, minutes, secs);
+        tv_timer.setText(time);
 
         updateViews();
 
@@ -259,7 +266,7 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
 
         stopWatch_wasRunning = stopWatch_running;
 
-        if (stopWatch_running) mStopWatchHandler.removeCallbacks(mStopWatchRunnable);
+        if (stopWatch_running && mStopWatchHandler!=null) mStopWatchHandler.removeCallbacks(mStopWatchRunnable);
 
         stopWatch_running = false;
     }
@@ -273,9 +280,9 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
         mScrollingRunnable = new Runnable() {
             @Override
             public void run() {
-                //TODO: need modification, not very right
-                sv_scrollView.smoothScrollBy(0, 1);        // 5 is how many pixels you want it to scroll vertically by
-                mScrollingHandler.postDelayed(this, speed);     // 10 is how many milliseconds you want this thread to run
+                //TODO: speed is not related to font size, which are supposed to be connected with line counts and font size
+                sv_scrollView.smoothScrollBy(0, 1);        // 1 is how many pixels you want it to scroll vertically by
+                mScrollingHandler.postDelayed(this, speed);     // speed is how many milliseconds you want this thread to run
             }
         };
         mScrollingHandler.postDelayed(mScrollingRunnable, 0);
@@ -292,11 +299,11 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
 
     }
 
-    private void restartScrolling() {
-        scrolling_running = true;
-        mObjectAnimator.setCurrentPlayTime(mCurrentPlayTime);
-        mObjectAnimator.start();
-    }
+//    private void restartScrolling() {
+//        scrolling_running = true;
+//        mObjectAnimator.setCurrentPlayTime(mCurrentPlayTime);
+//        mObjectAnimator.start();
+//    }
 
     //TODO: opening and closing camera would make UI irresponsive for about 1s
     private void startCamera() {

@@ -72,8 +72,9 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, Cursor cursor) {
         documentsListViewHolder holder = (documentsListViewHolder) viewHolder;
-        cursor.moveToPosition(cursor.getPosition());
-        holder.setDataForViews(cursor);
+        int position  = cursor.getPosition();
+        cursor.moveToPosition(position);
+        holder.setDataForViews(position,cursor);
         mDocumentList.add(mDocument);
     }
 
@@ -116,7 +117,7 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
 
         }
 
-        public void setDataForViews(final Cursor c) {
+        public void setDataForViews(final int position, final Cursor c) {
 
             final String fileName = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_NAME));
             final String fileOpenTime = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_LASTOPENTIME));
@@ -132,7 +133,7 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
                 @Override
                 public void onClick(View v) {
 
-                    renameFileNameDialog(fileTitle_tv, fileID);
+                    renameFileNameDialog(position,fileTitle_tv, fileID);
 
                 }
             });
@@ -144,7 +145,7 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
 
                     alertBuild.setTitle(R.string.delete_dialog_title)
                             .setMessage(String.format(mContext.getString(R.string.delete_dialog_message),
-                                    mDocumentList.get(Integer.parseInt(fileID)-1).title));
+                                    mDocumentList.get(position).title));
 
                     alertBuild.setPositiveButton(R.string.delete_dialog_positive_button, new DialogInterface.OnClickListener() {
                         @Override
@@ -216,15 +217,14 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
         mListener.onFilesListenerInteraction();
     }
 
-    private void renameFileNameDialog(final TextView tv, final String id) {
+    //TODO: dialog would dismiss when rotating, Dialog fragment is supposed to be used
+    private void renameFileNameDialog(int position, final TextView tv, final String id) {
         final EditText editText = new EditText(mContext);
 
         editText.setSingleLine(true);
         editText.setText(tv.getText());
 
-        int FileListIndex = Integer.parseInt(id);
-
-        final Document selectedDocument = mDocumentList.get(FileListIndex-1);
+        final Document selectedDocument = mDocumentList.get(position);
 
         AlertDialog.Builder alertBuild = new AlertDialog.Builder(mContext);
 
@@ -238,11 +238,11 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
                 tv.setText(newName);
                 selectedDocument.title = newName;
                 ContentValues fileValue = new ContentValues();
-                fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_NAME, selectedDocument.title);
-                fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_TYPE, selectedDocument.documentType);
-                fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_LASTOPENTIME, selectedDocument.time);
-                fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_CONTENT, selectedDocument.text);
-                fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_URI, selectedDocument.documentUri);
+                fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_NAME, newName);
+//                fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_TYPE, selectedDocument.documentType);
+//                fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_LASTOPENTIME, selectedDocument.time);
+//                fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_CONTENT, selectedDocument.text);
+//                fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_URI, selectedDocument.documentUri);
 
                 String selection = DocumentContract.DocumentEntry._ID + " =?";
                 String[] selectionArgs = {id};

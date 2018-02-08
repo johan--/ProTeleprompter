@@ -112,4 +112,18 @@ public class TeleprompterPreference {
         }
         return scrollingSpeed;
     }
+
+    public static boolean getFirstRun(Context context) {
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        if (prefs.getBoolean("firstRun", true)) {
+            editor.putBoolean("firstRun", false).apply();
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 }

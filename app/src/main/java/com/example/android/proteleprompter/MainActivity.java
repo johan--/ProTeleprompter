@@ -1,16 +1,15 @@
 package com.example.android.proteleprompter;
 
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.provider.OpenableColumns;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -19,6 +18,7 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 
 import com.example.android.proteleprompter.ContentProvider.DocumentContract;
+import com.example.android.proteleprompter.Utilities.TeleprompterPreference;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -49,10 +49,31 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (TeleprompterPreference.getFirstRun(MainActivity.this)) {
+
+                    openFileTypeReminder();
+
+                } else {
+                    performFileSearch();
+                }
+            }
+        });
+
+    }
+
+    private void openFileTypeReminder() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle(R.string.type_dialog_reminder_title);
+        builder.setMessage(R.string.type_dialog_reminder_message);
+        builder.setPositiveButton(R.string.type_dialog_reminder_button, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
                 performFileSearch();
             }
         });
 
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
