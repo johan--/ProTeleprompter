@@ -98,6 +98,9 @@
     <string name="edit_file_name_title">Rename document</string>
 
 
+    <string name="widget_recent_title">Recent opened document</string>
+
+
     <string-array name="slider_summaries">
         <!-- You can define as many summaries as you'd like -->
         <!-- The active summary will reflect the preference's current value -->
@@ -108,5 +111,7 @@
     </string-array>
     <item name="slider_default" format="float" type="string">0.5</item>
     <string name="slider_message">Optional message displayed in the dialog above the slider</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 
 </resources>

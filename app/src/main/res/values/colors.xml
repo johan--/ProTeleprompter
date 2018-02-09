@@ -9,4 +9,6 @@
 
     <color name="font_default_colour">#000000</color>
     <color name="background_default_colour">#FFFFFF</color>
+
+    <color name="widget_transparent_black">#45000000</color>
 </resources>
