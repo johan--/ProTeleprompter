@@ -122,6 +122,7 @@ public class ProTeleprompterWidget extends AppWidgetProvider {
 
     private static String retrieveRecentFileName(Context context, int id, Cursor cursor) {
         String fileName;
+        cursor.moveToFirst();
 
         if (id == -1) {
             fileName = context.getString(R.string.widget_no_recent_file);
