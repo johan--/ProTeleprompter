@@ -31,14 +31,30 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
 
     private static Context mContext;
     private MainFragment mFragment;
+    private Intent mIntentFromWidgetAddList;
+    private int mExtraFromWidget;
 
     private static final int READ_REQUEST_CODE = 39;
+
+    public static final int IMPORT_FILE_REQUEST_CODE = 8639;
+
+    public static final String IMPORT_FILE_INTENT_NAME = "com.example.android.proteleprompter.importFileFromWidget";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = getApplicationContext();
+
+        mIntentFromWidgetAddList = getIntent();
+
+        if (mIntentFromWidgetAddList.hasExtra(IMPORT_FILE_INTENT_NAME))
+            mExtraFromWidget = mIntentFromWidgetAddList.getIntExtra(IMPORT_FILE_INTENT_NAME, -200);
+
+        if (mExtraFromWidget == IMPORT_FILE_REQUEST_CODE) {
+            performFileSearch();
+            mExtraFromWidget = 0;
+        }
 
         mFragment = new MainFragment();
         getSupportFragmentManager().beginTransaction()
@@ -60,6 +76,25 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
             }
         });
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        if(intent.hasExtra(IMPORT_FILE_INTENT_NAME)){
+            performFileSearch();
+        }
+        super.onNewIntent(intent);
     }
 
     private void openFileTypeReminder() {
@@ -252,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         return pptText;
     }
 
-    public void fileClick(View view){
+    public void fileClick(View view) {
         ImageView imgView = view.findViewById(R.id.iv_fileTypeIcon);
         int fileId = Integer.valueOf(imgView.getTag().toString());
         Intent intent = new Intent(getBaseContext(), ScrollActivity.class);

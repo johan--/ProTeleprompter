@@ -25,13 +25,9 @@ public class ProTeleprompterWidget extends AppWidgetProvider {
 
     private static final String ACTION_PROTELEPROMPTER = "PROTELEPROMPTER_WIDGET";
 
-    private static final int READ_REQUEST_CODE = 39;
-
-    private static Intent importFilesIntent;
-
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
-        Intent openActivityIntent;
+        Intent openActivityIntent,importFilesIntent;
         PendingIntent openActivityPendingIntent, importFilesPendingIntent;
 
         mFileId = TeleprompterPreference.getRecentFileId(context);
@@ -47,7 +43,6 @@ public class ProTeleprompterWidget extends AppWidgetProvider {
 
         CharSequence widgetText = mRecentFileName;
 
-        performFileSearch();
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.proteleprompter_widget);
 
@@ -70,9 +65,15 @@ public class ProTeleprompterWidget extends AppWidgetProvider {
             openActivityIntent.putExtra(ScrollActivity.EXTRA_DOCUMENT_ID, mFileId);
         }
 
+        importFilesIntent = new Intent(context, MainActivity.class);
+
+        importFilesIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        importFilesIntent.putExtra(MainActivity.IMPORT_FILE_INTENT_NAME, MainActivity.IMPORT_FILE_REQUEST_CODE);
+
         openActivityPendingIntent = PendingIntent.getActivity(context, 0, openActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        importFilesPendingIntent = PendingIntent.getActivity(context, 0, importFilesIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        importFilesPendingIntent = PendingIntent.getActivity(context, 0, importFilesIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         views.setOnClickPendingIntent(R.id.widget_layout, openActivityPendingIntent);
 
@@ -134,30 +135,30 @@ public class ProTeleprompterWidget extends AppWidgetProvider {
         return fileName;
     }
 
-    private static void performFileSearch() {
-
-        importFilesIntent = new Intent(Intent.ACTION_GET_CONTENT);
-
-        importFilesIntent.addCategory(Intent.CATEGORY_OPENABLE);
-
-//        String[] mimeTypes = {"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-//                "text/plain",
-//                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-//                "application/msword",
-//                "application/vnd.ms-powerpoint",
-//                "application/vnd.ms-powerpoint",
-//                "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-//                "application/rtf",
-//                "application/x-rtf",
-//                "text/richtext",
-//                "application/vnd.google-apps.document",
-//                "application/pdf",
-//                "text/rtf"};
-
-        importFilesIntent.setType("text/plain");
-
-        //startActivity(intent, READ_REQUEST_CODE);
-
-    }
+//    private static void performFileSearch() {
+//
+//        importFilesIntent = new Intent(Intent.ACTION_GET_CONTENT);
+//
+//        importFilesIntent.addCategory(Intent.CATEGORY_OPENABLE);
+//
+////        String[] mimeTypes = {"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+////                "text/plain",
+////                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+////                "application/msword",
+////                "application/vnd.ms-powerpoint",
+////                "application/vnd.ms-powerpoint",
+////                "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+////                "application/rtf",
+////                "application/x-rtf",
+////                "text/richtext",
+////                "application/vnd.google-apps.document",
+////                "application/pdf",
+////                "text/rtf"};
+//
+//        importFilesIntent.setType("text/plain");
+//
+//        startActivityForResult(importFilesIntent, READ_REQUEST_CODE);
+//
+//    }
 }
 
