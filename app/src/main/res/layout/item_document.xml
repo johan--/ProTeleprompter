@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/listContent_condtraint_layout"
+    android:id="@+id/listContent_constraint_layout"
+    android:onClick="fileClick"
     android:layout_width="match_parent"
     android:layout_height="@dimen/list_height">
 

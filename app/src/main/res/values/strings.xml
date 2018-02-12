@@ -44,12 +44,10 @@
     <string name="pref_font_size_value_normal">30</string>
     <string name="pref_font_size_value_large">40</string>
 
-
     <string name="pref_mirrorMode_title">Mirror mode</string>
     <string name="pref_mirrorMode_key">mirrorMode</string>
     <string name="pref_mirrorMode_summary_off">Text will be displayed in the normal direction</string>
     <string name="pref_mirrorMode_summary_on">Text will be displayed in the opposite direction to normal</string>
-
 
     <string name="pref_scrollingSpeed_title">Scroll speed</string>
     <string name="pref_scrollingSpeed_key">scrollSpeed</string>
@@ -58,16 +56,13 @@
     <string name="pref_display_colour_key">DisplayedColourSettings</string>
     <string name="pref_display_colour_summary">Font and Background colours</string>
 
-
     <string name="pref_display_font_colour_title">Font colour</string>
     <string name="pref_display_font_colour_key">fontColour</string>
     <string name="pref_display_font_colour_summary">Define scrolling text colour</string>
 
-
     <string name="pref_display_background_colour_title">Background colour</string>
     <string name="pref_display_background_colour_key">backgroundColour</string>
     <string name="pref_display_background_colour_summary">Define scrolling background colour</string>
-
 
     <string name="pref_scrolling_speed_key">scrollingSpeed</string>
     <string name="pref_scrolling_speed_summary">Adjust teleprompter scrolling speed</string>
@@ -86,6 +81,8 @@
     <string name="pref_scrolling_speed_value_fast">Fast</string>
     <string name="pref_scrolling_speed_value_high_speed">High-speed</string>
 
+    <string name="pref_recent_files_Id">recentFilesId</string>
+
     <string name="delete_dialog_title">Delete confirm</string>
     <string name="delete_dialog_message">%s will be deleted from your teleprompter.</string>
     <string name="delete_dialog_positive_button">Delete</string>
@@ -95,22 +92,12 @@
     <string name="type_dialog_reminder_title">Tips</string>
     <string name="type_dialog_reminder_message">Choose file with <b><i>.txt</i></b> extension.</string>
 
-    <string name="edit_file_name_title">Rename document</string>
+    <string name="edit_dialog_rename_title">Rename document</string>
 
-
+    <string name="widget_recent_no_recent_title">Click to launch app</string>
     <string name="widget_recent_title">Recent opened document</string>
+    <string name="widget_no_recent_file">No recent document</string>
 
-
-    <string-array name="slider_summaries">
-        <!-- You can define as many summaries as you'd like -->
-        <!-- The active summary will reflect the preference's current value -->
-        <item>Slow</item> <!-- 0.00 to 0.25 -->
-        <item>Normal</item>   <!-- 0.25 to 0.50 -->
-        <item>Brisk</item>     <!-- 0.50 to 0.75 -->
-        <item>Fast</item>  <!-- 0.75 to 1.00 -->
-    </string-array>
-    <item name="slider_default" format="float" type="string">0.5</item>
-    <string name="slider_message">Optional message displayed in the dialog above the slider</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
 

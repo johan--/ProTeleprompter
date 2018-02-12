@@ -124,6 +124,18 @@ public class TeleprompterPreference {
         } else {
             return false;
         }
+    }
 
+    public static int getRecentFileId(Context context){
+        int recentFileId;
+
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(context);
+
+        String keyForRecentFile = context.getString(R.string.pref_recent_files_Id);
+
+        recentFileId = prefs.getInt("recentFilesId", -1);
+
+        return recentFileId;
     }
 }

@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.ImageView;
 
 import com.example.android.proteleprompter.ContentProvider.DocumentContract;
 import com.example.android.proteleprompter.Utilities.TeleprompterPreference;
@@ -249,5 +250,14 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         String pptText = "";
 
         return pptText;
+    }
+
+    public void fileClick(View view){
+        ImageView imgView = view.findViewById(R.id.iv_fileTypeIcon);
+        int fileId = Integer.valueOf(imgView.getTag().toString());
+        Intent intent = new Intent(getBaseContext(), ScrollActivity.class);
+        intent.putExtra(ScrollActivity.EXTRA_DOCUMENT_ID, fileId);
+        startActivity(intent);
+
     }
 }

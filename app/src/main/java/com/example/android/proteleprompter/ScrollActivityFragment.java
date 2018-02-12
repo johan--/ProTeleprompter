@@ -2,9 +2,13 @@ package com.example.android.proteleprompter;
 
 import android.Manifest;
 import android.animation.ObjectAnimator;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +20,9 @@ import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,6 +34,7 @@ import android.widget.FrameLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.example.android.proteleprompter.ContentProvider.DocumentContract;
 import com.example.android.proteleprompter.Data.Document;
 import com.example.android.proteleprompter.Utilities.CameraView;
 import com.example.android.proteleprompter.Utilities.CustomImagebutton;
@@ -37,7 +45,7 @@ import be.rijckaert.tim.animatedvector.FloatingMusicActionButton;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ScrollActivityFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class ScrollActivityFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener, LoaderManager.LoaderCallbacks<Cursor>{
 
     private static boolean PREFERENCE_HAS_BEEN_UPDATED;
     private ScrollView sv_scrollView;
@@ -55,6 +63,9 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
     private String mDocumentContent;
     private int mScrollSpeed;
     private long mCurrentPlayTime;
+    private int mFileId;
+
+    private static final int SINGLE_LOADER_ID = 300;
 
     private final String TAG = "ScrollFragment";
     private final int REQUEST_CAMERA = 330;
@@ -87,14 +98,14 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);//necessary for inflating menu in fragment
         try {
-            mDocument = (Document) getActivity().getIntent().getBundleExtra("bundle").getSerializable("document");
+            mFileId = getActivity().getIntent().getIntExtra(ScrollActivity.EXTRA_DOCUMENT_ID, -1);
         } catch (NullPointerException e) {
             Log.e(TAG, e.toString());
         }
-        if (mDocument != null) {
-            mDocumentContentUri = Uri.parse(mDocument.documentUri);
-            mDocumentContent = mDocument.text;
-        }
+//        if (mFileId != -1) {
+//            mDocumentContentUri = Uri.parse(mDocument.documentUri);
+//            mDocumentContent = mDocument.text;
+//        }
         android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(getActivity())
                 .registerOnSharedPreferenceChangeListener(this);
     }
@@ -167,6 +178,13 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        getLoaderManager().initLoader(SINGLE_LOADER_ID, null, this);
+
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
@@ -191,7 +209,7 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
 
 
         fl_cameraFrame.setVisibility(View.INVISIBLE);
-        tv_scrollContentView.setText(mDocumentContent);
+
         fmab_ScrollSwitch.changeMode(FloatingMusicActionButton.Mode.PLAY_TO_STOP);
 
         int hours = stopWatch_seconds / 3600;
@@ -290,7 +308,6 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
 
     }
 
-
     private void stopScrolling() {
 
         if (scrolling_running) mScrollingHandler.removeCallbacks(mScrollingRunnable);
@@ -298,12 +315,6 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
         scrolling_running = false;
 
     }
-
-//    private void restartScrolling() {
-//        scrolling_running = true;
-//        mObjectAnimator.setCurrentPlayTime(mCurrentPlayTime);
-//        mObjectAnimator.start();
-//    }
 
     //TODO: opening and closing camera would make UI irresponsive for about 1s
     private void startCamera() {
@@ -443,6 +454,26 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         PREFERENCE_HAS_BEEN_UPDATED = true;
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Uri SINGLE_DOCUMENT_URI = DocumentContract.DocumentEntry.buildDocumentUri(mFileId);
+        return new CursorLoader(getActivity(), SINGLE_DOCUMENT_URI, null,
+                null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (data == null || data.getCount() < 1) return;
+        data.moveToFirst();
+        String fileContent = data.getString(data.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_CONTENT));
+        tv_scrollContentView.setText(fileContent);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }
 

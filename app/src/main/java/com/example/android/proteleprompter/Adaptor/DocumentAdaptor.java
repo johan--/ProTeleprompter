@@ -48,14 +48,6 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
                 R.layout.item_document, parent, false);
         final documentsListViewHolder vh = new documentsListViewHolder(view);
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                openScrollingActivity(vh);
-
-            }
-        });
         return vh;
     }
 
@@ -82,23 +74,6 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
         mListener = listener;
     }
 
-    private void openScrollingActivity(documentsListViewHolder vh) {
-
-        Document document = mDocumentList.get(vh.getLayoutPosition());
-
-        Class mScrollActivity = ScrollActivity.class;
-
-        Intent startScrollActivityIntent = new Intent(mContext, mScrollActivity);
-
-        Bundle documentBundle = new Bundle();
-
-        documentBundle.putSerializable("document", document);
-
-        startScrollActivityIntent.putExtra("bundle", documentBundle);
-
-        ActivityCompat.startActivity(mContext, startScrollActivityIntent, null);
-    }
-
     public class documentsListViewHolder extends RecyclerView.ViewHolder {
 
         TextView fileTitle_tv;
@@ -121,9 +96,7 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
 
             final String fileName = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_NAME));
             final String fileOpenTime = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_LASTOPENTIME));
-            final String fileContent = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_CONTENT));
             final String fileType = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_TYPE));
-            final String fileUri = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_URI));
             final String fileID = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry._ID));
 
             fileTitle_tv.setText(fileName);
@@ -196,6 +169,7 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
 
             }
             fileTypeImage_iv.setImageResource(typeImageId);
+            fileTypeImage_iv.setTag(fileID);
 
             setDocumentData(c);
         }
@@ -228,7 +202,7 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
 
         AlertDialog.Builder alertBuild = new AlertDialog.Builder(mContext);
 
-        alertBuild.setTitle(R.string.edit_file_name_title)
+        alertBuild.setTitle(R.string.edit_dialog_rename_title)
                 .setView(editText);
 
         alertBuild.setPositiveButton("OK", new DialogInterface.OnClickListener() {
