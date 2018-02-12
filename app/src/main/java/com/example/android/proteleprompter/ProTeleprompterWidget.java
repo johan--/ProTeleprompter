@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.support.v4.app.TaskStackBuilder;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -27,7 +28,7 @@ public class ProTeleprompterWidget extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
-        Intent openActivityIntent,importFilesIntent;
+        Intent openActivityIntent, importFilesIntent;
         PendingIntent openActivityPendingIntent, importFilesPendingIntent;
 
         mFileId = TeleprompterPreference.getRecentFileId(context);
@@ -48,36 +49,49 @@ public class ProTeleprompterWidget extends AppWidgetProvider {
 
         views.setTextViewText(R.id.appwidget_text_file_name, widgetText);
 
+        importFilesIntent = new Intent(context, MainActivity.class);
+        importFilesIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        importFilesIntent.putExtra(MainActivity.IMPORT_FILE_INTENT_NAME, MainActivity.IMPORT_FILE_REQUEST_CODE);
+        importFilesPendingIntent = PendingIntent.getActivity(context, 0, importFilesIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        views.setOnClickPendingIntent(R.id.widget_add_ib, importFilesPendingIntent);
+
         if (widgetText.equals("No recent document")) {
 
             openActivityIntent = new Intent(context, MainActivity.class);
 
-            views.setTextViewText(R.id.appwidget_text_recent, context.getString(R.string.widget_recent_no_recent_title));
+            views.setTextViewText(R.id.appwidget_text_recent_title, context.getString(R.string.widget_recent_no_recent_title));
 
             views.setViewVisibility(R.id.widget_play_ib, View.GONE);
 
+            openActivityPendingIntent = PendingIntent.getActivity(context, 0, openActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            views.setOnClickPendingIntent(R.id.widget_layout, openActivityPendingIntent);
+
         } else {
 
-            views.setViewVisibility(R.id.widget_play_ib, View.VISIBLE);
+
 
             openActivityIntent = new Intent(context, ScrollActivity.class);
 
             openActivityIntent.putExtra(ScrollActivity.EXTRA_DOCUMENT_ID, mFileId);
+
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+
+            stackBuilder.addParentStack(ScrollActivity.class);
+
+            stackBuilder.addNextIntent(openActivityIntent);
+
+            PendingIntent resultPendingIntent =
+                    stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            views.setTextViewText(R.id.appwidget_text_recent_title, context.getString(R.string.widget_recent_title));
+
+            views.setOnClickPendingIntent(R.id.widget_layout, resultPendingIntent);
+
+            views.setViewVisibility(R.id.widget_play_ib, View.VISIBLE);
+
+            views.setOnClickPendingIntent(R.id.widget_play_ib, resultPendingIntent);
         }
-
-        importFilesIntent = new Intent(context, MainActivity.class);
-
-        importFilesIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        importFilesIntent.putExtra(MainActivity.IMPORT_FILE_INTENT_NAME, MainActivity.IMPORT_FILE_REQUEST_CODE);
-
-        openActivityPendingIntent = PendingIntent.getActivity(context, 0, openActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        importFilesPendingIntent = PendingIntent.getActivity(context, 0, importFilesIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-        views.setOnClickPendingIntent(R.id.widget_layout, openActivityPendingIntent);
-
-        views.setOnClickPendingIntent(R.id.widget_add_ib, importFilesPendingIntent);
 
         mCursor.close();
         // Instruct the widget manager to update the widget
@@ -95,7 +109,7 @@ public class ProTeleprompterWidget extends AppWidgetProvider {
     public static void updatePlantWidgets(Context context, AppWidgetManager appWidgetManager,
                                           int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager,appWidgetId);
+            updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
 
@@ -124,41 +138,14 @@ public class ProTeleprompterWidget extends AppWidgetProvider {
     private static String retrieveRecentFileName(Context context, int id, Cursor cursor) {
         String fileName;
         cursor.moveToFirst();
-
-        if (id == -1) {
+        if (id == -1 || cursor.getCount()==0) {
             fileName = context.getString(R.string.widget_no_recent_file);
         } else {
-
             fileName = cursor.getString(cursor.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_NAME));
         }
 
         return fileName;
     }
 
-//    private static void performFileSearch() {
-//
-//        importFilesIntent = new Intent(Intent.ACTION_GET_CONTENT);
-//
-//        importFilesIntent.addCategory(Intent.CATEGORY_OPENABLE);
-//
-////        String[] mimeTypes = {"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-////                "text/plain",
-////                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-////                "application/msword",
-////                "application/vnd.ms-powerpoint",
-////                "application/vnd.ms-powerpoint",
-////                "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-////                "application/rtf",
-////                "application/x-rtf",
-////                "text/richtext",
-////                "application/vnd.google-apps.document",
-////                "application/pdf",
-////                "text/rtf"};
-//
-//        importFilesIntent.setType("text/plain");
-//
-//        startActivityForResult(importFilesIntent, READ_REQUEST_CODE);
-//
-//    }
 }
 

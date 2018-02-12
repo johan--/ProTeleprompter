@@ -39,13 +39,18 @@ import com.example.android.proteleprompter.Data.Document;
 import com.example.android.proteleprompter.Utilities.CameraView;
 import com.example.android.proteleprompter.Utilities.CustomImagebutton;
 import com.example.android.proteleprompter.Utilities.TeleprompterPreference;
+import com.google.android.gms.appinvite.AppInviteInvitation;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import be.rijckaert.tim.animatedvector.FloatingMusicActionButton;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ScrollActivityFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener, LoaderManager.LoaderCallbacks<Cursor>{
+public class ScrollActivityFragment extends Fragment implements  GoogleApiClient.OnConnectionFailedListener,SharedPreferences.OnSharedPreferenceChangeListener, LoaderManager.LoaderCallbacks<Cursor>{
 
     private static boolean PREFERENCE_HAS_BEEN_UPDATED;
     private ScrollView sv_scrollView;
@@ -65,6 +70,7 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
     private long mCurrentPlayTime;
     private int mFileId;
 
+    private static final int REQUEST_INVITE_CODE = 1226;
     private static final int SINGLE_LOADER_ID = 300;
 
     private final String TAG = "ScrollFragment";
@@ -173,7 +179,7 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_scroll, menu);
+        inflater.inflate(R.menu.menu_main, menu);
         /* Use the inflater's inflate method to inflate our menu layout to this menu */
     }
 
@@ -191,10 +197,23 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
             Intent intent = new Intent(getActivity(), SettingActivity.class);
             startActivity(intent);
         }
+        if(id == R.id.action_share){
+            sendInvitation();
+        }
+
 
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void sendInvitation() {
+        Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
+                .setMessage(getString(R.string.invitation_message))
+                .setCallToActionText(getString(R.string.invitation_cta))
+                .build();
+        startActivityForResult(intent, REQUEST_INVITE_CODE);
+    }
+
 
     private void initViews(View root) {
 
@@ -303,8 +322,7 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
                 mScrollingHandler.postDelayed(this, speed);     // speed is how many milliseconds you want this thread to run
             }
         };
-        mScrollingHandler.postDelayed(mScrollingRunnable, 0);
-
+        mScrollingHandler.postDelayed(mScrollingRunnable, 5000-(stopWatch_seconds*1000)>0 ? 5000-(stopWatch_seconds*1000) : 0);
 
     }
 
@@ -432,7 +450,6 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
     public void onStop() {
 
         if (mCamera != null) mCamera.stopPreview();
-        if (mCamera != null) mCamera.release();
 
         if (scrolling_running) stopScrolling();
         if (stopWatch_running) stopStopWatch();
@@ -444,7 +461,7 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
 
     @Override
     public void onDestroy() {
-
+        if (mCamera != null) mCamera.release();
         super.onDestroy();
 
         android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(getActivity())
@@ -474,6 +491,25 @@ public class ScrollActivityFragment extends Fragment implements SharedPreference
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d(TAG, "onConnectionFailed:" + connectionResult);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode);
+        if (requestCode == REQUEST_INVITE_CODE && resultCode == RESULT_OK) {
+            // Check how many invitations were sent and log.
+            String[] ids = AppInviteInvitation.getInvitationIds(resultCode, data);
+            Log.d(TAG, "Invitations sent: " + ids.length);
+        } else {
+            // Sending failed or it was canceled, show failure message to the user
+            Log.d(TAG, "Failed to send invitation.");
+
+        }
     }
 }
 

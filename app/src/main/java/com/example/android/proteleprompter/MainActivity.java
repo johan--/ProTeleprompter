@@ -1,17 +1,20 @@
 package com.example.android.proteleprompter;
 
 import android.app.AlertDialog;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +23,10 @@ import android.widget.ImageView;
 
 import com.example.android.proteleprompter.ContentProvider.DocumentContract;
 import com.example.android.proteleprompter.Utilities.TeleprompterPreference;
+import com.google.android.gms.appinvite.AppInviteInvitation;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,11 +34,12 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener,
+        GoogleApiClient.OnConnectionFailedListener {
 
-    private static Context mContext;
+    private static final int REQUEST_INVITE_CODE = 1226;
+    private static final String TAG = MainActivity.class.getName();
     private MainFragment mFragment;
-    private Intent mIntentFromWidgetAddList;
     private int mExtraFromWidget;
 
     private static final int READ_REQUEST_CODE = 39;
@@ -39,14 +47,19 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     public static final int IMPORT_FILE_REQUEST_CODE = 8639;
 
     public static final String IMPORT_FILE_INTENT_NAME = "com.example.android.proteleprompter.importFileFromWidget";
+    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mContext = getApplicationContext();
 
-        mIntentFromWidgetAddList = getIntent();
+        Intent mIntentFromWidgetAddList = getIntent();
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API)
+                .build();
 
         if (mIntentFromWidgetAddList.hasExtra(IMPORT_FILE_INTENT_NAME))
             mExtraFromWidget = mIntentFromWidgetAddList.getIntExtra(IMPORT_FILE_INTENT_NAME, -200);
@@ -75,26 +88,54 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                 }
             }
         });
+//        FirebaseDynamicLinks.getInstance().getDynamicLink(getIntent())
+//                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
+//                    @Override
+//                    public void onSuccess(PendingDynamicLinkData data) {
+//                        if (data == null) {
+//                            Log.d(TAG, "getInvitation: no data");
+//                            return;
+//                        }
+//
+//                        // Get the deep link
+//                        Uri deepLink = data.getLink();
+//
+//                        // Extract invite
+//                        FirebaseAppInvite invite = FirebaseAppInvite.getInvitation(data);
+//                        if (invite != null) {
+//                            String invitationId = invite.getInvitationId();
+//                        }
+//
+//                        // Handle the deep link
+//                        // ...
+//                    }
+//                })
+//                .addOnFailureListener(this, new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.w(TAG, "getDynamicLink:onFailure", e);
+//                    }
+//                });
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onResume() {
-
-        super.onResume();
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
-        if(intent.hasExtra(IMPORT_FILE_INTENT_NAME)){
+        if (intent.hasExtra(IMPORT_FILE_INTENT_NAME)) {
             performFileSearch();
         }
         super.onNewIntent(intent);
+    }
+
+    @Override
+    protected void onStop() {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, ProTeleprompterWidget.class));
+        //Trigger data update to handle widgets and force a data refresh
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.layout.proteleprompter_widget);
+        //Now update all widgets
+        ProTeleprompterWidget.updatePlantWidgets(this, appWidgetManager, appWidgetIds);
+        super.onStop();
     }
 
     private void openFileTypeReminder() {
@@ -131,18 +172,25 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
             Intent intent = new Intent(this, SettingActivity.class);
             startActivity(intent);
         }
+        if (id == R.id.action_share) {
+            sendInvitation();
+        }
 
         return super.onOptionsItemSelected(item);
     }
 
 
-    public static Context getmContext() {
-        return mContext;
-    }
-
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    private void sendInvitation() {
+        Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
+                .setMessage(getString(R.string.invitation_message))
+                .setCallToActionText(getString(R.string.invitation_cta))
+                .build();
+        startActivityForResult(intent, REQUEST_INVITE_CODE);
     }
 
 
@@ -175,6 +223,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode);
 
         if (requestCode == READ_REQUEST_CODE && resultCode == RESULT_OK) {
             Uri fileImportedUri = data.getData();
@@ -186,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                 String fileNameWithExtension = returnCursor.getString(fileNameIndex);
                 String fileName = fileNameWithExtension.substring(0, fileNameWithExtension.lastIndexOf("."));
 
-                ContentResolver cR = MainActivity.getmContext().getContentResolver();
+                ContentResolver cR = MainActivity.this.getContentResolver();
                 MimeTypeMap mime = MimeTypeMap.getSingleton();
                 String fileType = mime.getExtensionFromMimeType(cR.getType(fileImportedUri));
 
@@ -227,9 +276,19 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
 
                 getContentResolver().insert(DocumentContract.DocumentEntry.CONTENT_URI, fileValue);
 
+
+                returnCursor.close();
+                mFragment.updateAdapter();
             }
-            returnCursor.close();
-            mFragment.updateAdapter();
+        }
+        if (requestCode == REQUEST_INVITE_CODE && resultCode == RESULT_OK) {
+            // Check how many invitations were sent and log.
+            String[] ids = AppInviteInvitation.getInvitationIds(resultCode, data);
+            Log.d(TAG, "Invitations sent: " + ids.length);
+        } else {
+            // Sending failed or it was canceled, show failure message to the user
+            Log.d(TAG, "Failed to send invitation.");
+
         }
     }
 
@@ -294,5 +353,10 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         intent.putExtra(ScrollActivity.EXTRA_DOCUMENT_ID, fileId);
         startActivity(intent);
 
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d(TAG, "onConnectionFailed:" + connectionResult);
     }
 }

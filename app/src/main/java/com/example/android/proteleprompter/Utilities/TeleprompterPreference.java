@@ -134,7 +134,7 @@ public class TeleprompterPreference {
 
         String keyForRecentFile = context.getString(R.string.pref_recent_files_Id);
 
-        recentFileId = prefs.getInt("recentFilesId", -1);
+        recentFileId = prefs.getInt(keyForRecentFile, -1);
 
         return recentFileId;
     }

@@ -40,7 +40,7 @@
             tools:text="@string/appwidget_text" />
 
         <TextView
-            android:id="@+id/appwidget_text_recent"
+            android:id="@+id/appwidget_text_recent_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"

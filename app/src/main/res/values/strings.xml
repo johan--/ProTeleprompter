@@ -100,5 +100,9 @@
 
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+    <string name="invitation_title">Share ProTeleprompter</string>
+    <string name="invitation_message">I found a great teleprompter app and I would like to invite you to have a try!</string>
+    <string name="invitation_cta">Download now!</string>
+
 
 </resources>
