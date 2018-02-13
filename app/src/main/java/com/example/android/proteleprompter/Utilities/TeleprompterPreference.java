@@ -57,7 +57,7 @@ public class TeleprompterPreference {
 
         String keyForFontColour = context.getString(R.string.pref_display_font_colour_key);
 
-        fontColour = prefs.getInt(keyForFontColour, R.color.font_default_colour);
+        fontColour = prefs.getInt(keyForFontColour, -16777216);//-16777216 is integer value of black colour.
 
         return fontColour;
     }
@@ -70,7 +70,7 @@ public class TeleprompterPreference {
 
         String keyForBackgroundColour = context.getString(R.string.pref_display_background_colour_key);
 
-        backgroundColour = prefs.getInt(keyForBackgroundColour, R.color.background_default_colour);
+        backgroundColour = prefs.getInt(keyForBackgroundColour, -1);//-1 is integer value of white colour
 
         return backgroundColour;
     }

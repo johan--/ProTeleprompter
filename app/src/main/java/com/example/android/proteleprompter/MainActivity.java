@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                 String fileType = mime.getExtensionFromMimeType(cR.getType(fileImportedUri));
 
                 Calendar c = Calendar.getInstance();
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy");
                 String fileTime = df.format(c.getTime());
 
                 String fileText = readTextFromTxtFile(fileImportedUri);

@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ListPreference
+        android:icon="@drawable/ic_directions_run_black_24px"
         android:defaultValue="@string/pref_scrolling_speed_default"
         android:title="@string/pref_scrolling_speed_title"
         android:key="@string/pref_scrolling_speed_key"
@@ -11,6 +12,7 @@
 
 
     <ListPreference
+        android:icon="@drawable/ic_format_size_black_24px"
         android:defaultValue="@string/pref_font_size_option_default"
         android:entries="@array/pref_font_size_options"
         android:entryValues="@array/pref_font_size_values"
@@ -18,12 +20,14 @@
         android:title="@string/pref_font_size_title" />
 
     <android.support.v7.preference.SwitchPreferenceCompat
+        android:icon="@drawable/ic_mirror_black_24px"
         android:defaultValue="false"
         android:key="@string/pref_mirrorMode_key"
         android:title="@string/pref_mirrorMode_title"
         android:summary="@string/pref_mirrorMode_summary_off"/>
 
     <Preference
+        android:icon="@drawable/ic_color_lens_black_24px"
         android:title="@string/pref_display_colour_header"
         android:key="@string/pref_display_colour_key" />
 

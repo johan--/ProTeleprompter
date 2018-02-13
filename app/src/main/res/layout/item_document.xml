@@ -14,7 +14,8 @@
         android:layout_height="@dimen/list_icon_size"
         android:layout_margin="@dimen/horizon_margin"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextView
         android:id="@+id/tv_fileTitle"
@@ -67,7 +68,7 @@
         android:padding="@dimen/list_actionIcon_padding"
         android:background="@android:color/transparent"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_delete_black_18dp"
+        android:src="@drawable/ic_delete_forever_black_24px"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="parent" />

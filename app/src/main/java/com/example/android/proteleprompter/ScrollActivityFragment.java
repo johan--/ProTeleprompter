@@ -2,9 +2,6 @@ package com.example.android.proteleprompter;
 
 import android.Manifest;
 import android.animation.ObjectAnimator;
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -50,7 +47,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ScrollActivityFragment extends Fragment implements  GoogleApiClient.OnConnectionFailedListener,SharedPreferences.OnSharedPreferenceChangeListener, LoaderManager.LoaderCallbacks<Cursor>{
+public class ScrollActivityFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener, SharedPreferences.OnSharedPreferenceChangeListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private static boolean PREFERENCE_HAS_BEEN_UPDATED;
     private ScrollView sv_scrollView;
@@ -93,6 +90,8 @@ public class ScrollActivityFragment extends Fragment implements  GoogleApiClient
     private Runnable mStopWatchRunnable;
     private Runnable mScrollingRunnable;
 
+    private int mScrollViewPosition;
+
     private ObjectAnimator mObjectAnimator;
 
     public ScrollActivityFragment() {
@@ -121,11 +120,6 @@ public class ScrollActivityFragment extends Fragment implements  GoogleApiClient
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_scroll, container, false);
 
-        if (savedInstanceState != null) {
-            stopWatch_seconds = savedInstanceState.getInt("seconds");
-            stopWatch_running = savedInstanceState.getBoolean("running", true);
-            stopWatch_wasRunning = savedInstanceState.getBoolean("wasRunning");
-        }
 
         initViews(root);
 
@@ -180,14 +174,21 @@ public class ScrollActivityFragment extends Fragment implements  GoogleApiClient
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_main, menu);
-        /* Use the inflater's inflate method to inflate our menu layout to this menu */
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         getLoaderManager().initLoader(SINGLE_LOADER_ID, null, this);
 
+        if (savedInstanceState != null) {
+            stopWatch_seconds = savedInstanceState.getInt("seconds", 0);
+            stopWatch_running = savedInstanceState.getBoolean("running", true);
+            stopWatch_wasRunning = savedInstanceState.getBoolean("wasRunning");
+            mScrollViewPosition = savedInstanceState.getInt("scrollingPosition", 0);
+        }
+
         super.onActivityCreated(savedInstanceState);
+
     }
 
     @Override
@@ -197,10 +198,9 @@ public class ScrollActivityFragment extends Fragment implements  GoogleApiClient
             Intent intent = new Intent(getActivity(), SettingActivity.class);
             startActivity(intent);
         }
-        if(id == R.id.action_share){
+        if (id == R.id.action_share) {
             sendInvitation();
         }
-
 
 
         return super.onOptionsItemSelected(item);
@@ -236,6 +236,7 @@ public class ScrollActivityFragment extends Fragment implements  GoogleApiClient
         int secs = stopWatch_seconds % 60;
         String time = String.format(getString(R.string.timer_time), hours, minutes, secs);
         tv_timer.setText(time);
+        sv_scrollView.setScrollY(mScrollViewPosition);
 
         updateViews();
 
@@ -303,7 +304,8 @@ public class ScrollActivityFragment extends Fragment implements  GoogleApiClient
 
         stopWatch_wasRunning = stopWatch_running;
 
-        if (stopWatch_running && mStopWatchHandler!=null) mStopWatchHandler.removeCallbacks(mStopWatchRunnable);
+        if (stopWatch_running && mStopWatchHandler != null)
+            mStopWatchHandler.removeCallbacks(mStopWatchRunnable);
 
         stopWatch_running = false;
     }
@@ -322,7 +324,7 @@ public class ScrollActivityFragment extends Fragment implements  GoogleApiClient
                 mScrollingHandler.postDelayed(this, speed);     // speed is how many milliseconds you want this thread to run
             }
         };
-        mScrollingHandler.postDelayed(mScrollingRunnable, 5000-(stopWatch_seconds*1000)>0 ? 5000-(stopWatch_seconds*1000) : 0);
+        mScrollingHandler.postDelayed(mScrollingRunnable, 5000 - (stopWatch_seconds * 1000) > 0 ? 5000 - (stopWatch_seconds * 1000) : 0);
 
     }
 
@@ -426,10 +428,14 @@ public class ScrollActivityFragment extends Fragment implements  GoogleApiClient
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
+        mScrollViewPosition = sv_scrollView.getScrollY();
         savedInstanceState.putInt("seconds", stopWatch_seconds);
         savedInstanceState.putBoolean("running", stopWatch_running);
         savedInstanceState.putBoolean("wasRunning", stopWatch_wasRunning);
+        savedInstanceState.putInt("scrollingPosition", mScrollViewPosition);
+        super.onSaveInstanceState(savedInstanceState);
     }
+
 
     @Override
     public void onResume() {

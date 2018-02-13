@@ -9,14 +9,14 @@
     <dimen name="horizon_margin_to_right_edge">10dp</dimen>
     <dimen name="horizon_margin_between_two_icon">4dp</dimen>
 
-    <dimen name="horizon_file_name_right_margin">48dp</dimen>
+    <dimen name="horizon_file_name_right_margin">16dp</dimen>
 
     <dimen name="list_height">72dp</dimen>
     <dimen name="list_subtitle">48dp</dimen>
     <dimen name="toolbar_size">56dp</dimen>
 
-    <dimen name="list_icon_size">40dp</dimen>
-    <dimen name="list_actionIcon_size">30dp</dimen>
+    <dimen name="list_icon_size">32dp</dimen>
+    <dimen name="list_actionIcon_size">32dp</dimen>
     <dimen name="list_actionIcon_padding">6dp</dimen>
 
     <dimen name="heading_font_size">16sp</dimen>
