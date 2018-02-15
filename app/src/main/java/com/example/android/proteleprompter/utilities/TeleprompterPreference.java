@@ -1,4 +1,4 @@
-package com.example.android.proteleprompter.Utilities;
+package com.example.android.proteleprompter.utilities;
 
 
 import android.content.Context;

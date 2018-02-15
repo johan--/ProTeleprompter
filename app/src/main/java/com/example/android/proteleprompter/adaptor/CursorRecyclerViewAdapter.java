@@ -1,4 +1,4 @@
-package com.example.android.proteleprompter.Adaptor;
+package com.example.android.proteleprompter.adaptor;
 
 
 import android.content.Context;
@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
-    protected Context mContext;
+    private final Context mContext;
 
     private Cursor mCursor;
 
@@ -16,7 +16,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
 
     private int mRowIdColumn;
 
-    private DataSetObserver mDataSetObserver;
+    private final DataSetObserver mDataSetObserver;
 
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -30,7 +30,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
 
     public static final String TAG = CursorRecyclerViewAdapter.class.getSimpleName();
 
-    public abstract void onBindViewHolder(VH viewHolder, Cursor cursor);
+    protected abstract void onBindViewHolder(VH viewHolder, Cursor cursor);
 
     public Cursor getCursor() {
         return mCursor;
@@ -68,7 +68,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
         return 0;
     }
 
-    public CursorRecyclerViewAdapter(Context context, Cursor cursor) {
+    CursorRecyclerViewAdapter(Context context, Cursor cursor) {
         mContext = context;
         mCursor = cursor;
         mDataValid = cursor != null;
@@ -79,9 +79,9 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
         }
     }
 
-    public Cursor swapCursor(Cursor newCursor) {
+    public void swapCursor(Cursor newCursor) {
         if (newCursor == mCursor) {
-            return null;
+            return;
         }
         final Cursor oldCursor = mCursor;
         if (oldCursor != null && mDataSetObserver != null) {
@@ -101,15 +101,14 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
             notifyDataSetChanged();
             //There is no notifyDataSetInvalidated() method in RecyclerView.Adapter
         }
-        return oldCursor;
     }
 
-    public void setDataValid(boolean mDataValid) {
+    private void setDataValid(boolean mDataValid) {
         this.mDataValid = mDataValid;
     }
 
     private class NotifyingDataSetObserver extends DataSetObserver {
-        private RecyclerView.Adapter adapter;
+        private final RecyclerView.Adapter adapter;
 
         public NotifyingDataSetObserver(RecyclerView.Adapter adapter) {
             this.adapter = adapter;

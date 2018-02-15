@@ -9,7 +9,6 @@ import android.support.v7.preference.Preference;
 
 
 import com.kizitonwose.colorpreference.ColorDialog;
-import com.kizitonwose.colorpreference.ColorPreference;
 import com.kizitonwose.colorpreferencecompat.ColorPreferenceCompat;
 
 

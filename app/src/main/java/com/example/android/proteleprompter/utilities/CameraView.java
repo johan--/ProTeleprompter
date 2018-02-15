@@ -1,10 +1,9 @@
-package com.example.android.proteleprompter.Utilities;
+package com.example.android.proteleprompter.utilities;
 
 import android.content.Context;
 import android.content.res.Configuration;
 import android.hardware.Camera;
 import android.util.Log;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -12,8 +11,8 @@ import java.io.IOException;
 
 
 public class CameraView extends SurfaceView implements SurfaceHolder.Callback{
-    private SurfaceHolder mHolder;
-    private Camera mCamera;
+    private final SurfaceHolder mHolder;
+    private final Camera mCamera;
     private final String TAG = this.getContext().toString();
 
     public CameraView(Context context, Camera camera) {

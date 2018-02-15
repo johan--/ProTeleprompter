@@ -31,11 +31,11 @@ import android.widget.FrameLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.example.android.proteleprompter.ContentProvider.DocumentContract;
-import com.example.android.proteleprompter.Data.Document;
-import com.example.android.proteleprompter.Utilities.CameraView;
-import com.example.android.proteleprompter.Utilities.CustomImagebutton;
-import com.example.android.proteleprompter.Utilities.TeleprompterPreference;
+import com.example.android.proteleprompter.contentprovider.DocumentContract;
+import com.example.android.proteleprompter.data.Document;
+import com.example.android.proteleprompter.utilities.CameraView;
+import com.example.android.proteleprompter.utilities.CustomImagebutton;
+import com.example.android.proteleprompter.utilities.TeleprompterPreference;
 import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -354,7 +354,7 @@ public class ScrollActivityFragment extends Fragment implements GoogleApiClient.
     /**
      * A safe way to get an instance of the Camera object.
      */
-    public static Camera getCameraInstance() {
+    private static Camera getCameraInstance() {
         Camera c = null;
         try {
             c = Camera.open(FRONT_CAMERA_CODE); //1 means front camera, 0 means back camera

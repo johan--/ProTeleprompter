@@ -105,11 +105,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        if (preference.getKey().equals(getResources().getString(R.string.pref_display_colour_key))) {
+        return preference.getKey().equals(getResources().getString(R.string.pref_display_colour_key));
 
-            return true;
-        }
-
-        return false;
     }
 }

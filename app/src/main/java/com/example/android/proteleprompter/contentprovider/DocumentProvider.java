@@ -1,4 +1,4 @@
-package com.example.android.proteleprompter.ContentProvider;
+package com.example.android.proteleprompter.contentprovider;
 
 
 import android.content.ContentProvider;

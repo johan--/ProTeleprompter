@@ -2,19 +2,15 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="horizon_margin_with_padding">8dp</dimen>
     <dimen name="horizon_margin">16dp</dimen>
     <dimen name="vertical_margin">16dp</dimen>
 
     <dimen name="horizon_margin_to_right_edge">10dp</dimen>
     <dimen name="horizon_margin_between_two_icon">4dp</dimen>
 
-    <dimen name="horizon_margin_left_title">72dp</dimen>
     <dimen name="horizon_file_name_right_margin">16dp</dimen>
 
     <dimen name="list_height">72dp</dimen>
-    <dimen name="list_subtitle">48dp</dimen>
-    <dimen name="toolbar_size">56dp</dimen>
 
     <dimen name="list_icon_size">32dp</dimen>
     <dimen name="list_actionIcon_size">32dp</dimen>
@@ -23,12 +19,10 @@
     <dimen name="heading_font_size">16sp</dimen>
 
     <dimen name="pref_font_size_small">20sp</dimen>
-    <dimen name="pref_font_size_normal">40sp</dimen>
-    <dimen name="pref_font_size_large">60sp</dimen>
 
     <!--
 Refer to App Widget Documentation for margin information
 http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     -->
-    <dimen name="widget_margin">8dp</dimen>
+    <dimen name="widget_margin">0dp</dimen>
 </resources>

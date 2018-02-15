@@ -40,7 +40,6 @@ public class ProTeleprompterService extends IntentService {
             final String action = intent.getAction();
             if (ACTION_UPDATE_WIDGET.equals(action)) {
                 handleUpdateWidget();
-
             }
         }
     }

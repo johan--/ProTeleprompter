@@ -24,11 +24,11 @@
             android:layout_height="?attr/actionBarSize">
 
             <TextView
-                android:id="@+id/mainActivity_title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/app_name"
                 android:layout_marginLeft="@dimen/horizon_margin"
+                android:layout_marginStart="@dimen/horizon_margin"
                 android:textColor="@android:color/white"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Widget.ActionBar.Title"
                 android:gravity="center_vertical"/>
@@ -42,6 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_playlist_add_white_24dp" />
+        app:srcCompat="@drawable/ic_playlist_add_white_24dp"
+        android:contentDescription="@string/content_description_add_file_button"/>
 
 </android.support.design.widget.CoordinatorLayout>

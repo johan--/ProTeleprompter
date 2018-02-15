@@ -3,12 +3,8 @@
     <string name="action_settings">Settings</string>
     <string name="action_colours_settings">Colour Settings</string>
 
-    <string name="error_message_loading_users">There seems to have been some error.</string>
-    <string name="default_message_loading_users">Loading</string>
-
     <string name="timer_startTime">00:00:00</string>
     <string name="timer_time">%02d:%02d:%02d</string>
-    <string name="timer_finish_time">99:99:99</string>
 
     <string name="ok">OK</string>
     <string name="permission_camera_rationale">Camera permission is needed to show the camera preview.</string>
@@ -49,12 +45,8 @@
     <string name="pref_mirrorMode_summary_off">Text will be displayed in the normal direction</string>
     <string name="pref_mirrorMode_summary_on">Text will be displayed in the opposite direction to normal</string>
 
-    <string name="pref_scrollingSpeed_title">Scroll speed</string>
-    <string name="pref_scrollingSpeed_key">scrollSpeed</string>
-
     <string name="pref_display_colour_header">Display colour settings</string>
     <string name="pref_display_colour_key">DisplayedColourSettings</string>
-    <string name="pref_display_colour_summary">Font and Background colours</string>
 
     <string name="pref_display_font_colour_title">Font colour</string>
     <string name="pref_display_font_colour_key">fontColour</string>
@@ -65,7 +57,6 @@
     <string name="pref_display_background_colour_summary">Define scrolling background colour</string>
 
     <string name="pref_scrolling_speed_key">scrollingSpeed</string>
-    <string name="pref_scrolling_speed_summary">Adjust teleprompter scrolling speed</string>
     <string name="pref_scrolling_speed_title">Scrolling Speed</string>
     <string name="pref_scrolling_speed_default">Normal</string>
 
@@ -99,7 +90,6 @@
     <string name="widget_no_recent_file">No recent document</string>
 
     <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
     <string name="invitation_title">Share ProTeleprompter</string>
     <string name="invitation_message">I found a great teleprompter app and I would like to invite you to have a try!</string>
     <string name="invitation_cta">Download now!</string>
@@ -111,6 +101,11 @@
     <string name="content_description_widget_play_icon">Launch scrolling page</string>
     <string name="content_description_widget_add_list_icon">Import new file</string>
 
+    <string name="content_description_add_file_button">Add file float action button</string>
+
     <string name="no_file_text">No file</string>
+    <string name="content_description_no_file">No file added icon</string>
+    <string name="content_description_photo_alt_button">Open camera alt button</string>
+    <string name="content_description_music_button">Start scrolling or pause button</string>
 
 </resources>

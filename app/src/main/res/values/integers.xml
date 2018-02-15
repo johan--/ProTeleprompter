@@ -1,4 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <integer name="pref_scrolling_speed_default">25</integer>
-</resources>
+<resources></resources>

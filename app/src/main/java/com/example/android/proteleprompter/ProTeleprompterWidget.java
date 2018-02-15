@@ -10,8 +10,8 @@ import android.support.v4.app.TaskStackBuilder;
 import android.view.View;
 import android.widget.RemoteViews;
 
-import com.example.android.proteleprompter.ContentProvider.DocumentContract;
-import com.example.android.proteleprompter.Utilities.TeleprompterPreference;
+import com.example.android.proteleprompter.contentprovider.DocumentContract;
+import com.example.android.proteleprompter.utilities.TeleprompterPreference;
 
 /**
  * Implementation of App Widget functionality.
@@ -24,8 +24,8 @@ public class ProTeleprompterWidget extends AppWidgetProvider {
 
     private static String mRecentFileName;
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+    private static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+                                        int appWidgetId) {
         Intent openActivityIntent, importFilesIntent;
         PendingIntent openActivityPendingIntent, importFilesPendingIntent;
 

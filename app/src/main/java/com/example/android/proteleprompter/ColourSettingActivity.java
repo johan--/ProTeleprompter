@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
@@ -70,7 +68,7 @@ public class ColourSettingActivity extends AppCompatActivity implements ColorDia
         }
     }
 
-    public void showFontColourPickerDialog(String tag) {
+    private void showFontColourPickerDialog(String tag) {
         if (tag.equals(FONT_COLOUR_PICKER_PREFERENCE_TAG))
             new ColorDialog.Builder(this)
                     .setColorShape(ColorShape.CIRCLE) //CIRCLE or SQUARE

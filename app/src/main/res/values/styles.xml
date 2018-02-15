@@ -10,20 +10,9 @@
         <item name="actionOverflowButtonStyle">@style/OverFlow</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
     <style name="OverFlow" parent="@style/Widget.AppCompat.Light.ActionButton.Overflow">
         <item name="android:src">@drawable/ic_more_vert_white_24px</item>
     </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-
 
 
 </resources>

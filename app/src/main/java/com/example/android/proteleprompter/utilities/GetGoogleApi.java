@@ -1,4 +1,4 @@
-package com.example.android.proteleprompter.Utilities;
+package com.example.android.proteleprompter.utilities;
 
 
 import android.app.Activity;
@@ -11,7 +11,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class GetGoogleApi extends Activity implements EasyPermissions.PermissionCallbacks {
 
-    Context mContext;
+    private final Context mContext;
 
 
     public GetGoogleApi(Context context) {

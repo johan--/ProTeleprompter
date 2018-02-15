@@ -1,13 +1,13 @@
-package com.example.android.proteleprompter.ContentProvider;
+package com.example.android.proteleprompter.contentprovider;
 
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.android.proteleprompter.ContentProvider.DocumentContract.DocumentEntry;
+import com.example.android.proteleprompter.contentprovider.DocumentContract.DocumentEntry;
 
-public class DocumentDbHelper extends SQLiteOpenHelper {
+class DocumentDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "files.db";
 
     private static final int DATABASE_VERSION = 8;

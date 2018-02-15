@@ -1,18 +1,18 @@
-package com.example.android.proteleprompter.Utilities;
+package com.example.android.proteleprompter.utilities;
 
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 
 
 public class EnableMultiDex extends MultiDexApplication {
-    private static EnableMultiDex enableMultiDex;
-    public static Context context;
+    private  EnableMultiDex enableMultiDex;
+    private Context context;
 
     public EnableMultiDex(){
         enableMultiDex=this;
     }
 
-    public static EnableMultiDex getEnableMultiDexApp() {
+    public  EnableMultiDex getEnableMultiDexApp() {
         return enableMultiDex;
     }
 

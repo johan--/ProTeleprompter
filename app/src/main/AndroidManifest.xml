@@ -17,8 +17,8 @@
         android:required="false" />
 
     <application
-        android:name=".Utilities.EnableMultiDex"
-        android:allowBackup="true"
+        android:name=".utilities.EnableMultiDex"
+        android:fullBackupContent="@xml/my_backup_rules"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -27,6 +27,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:node="replace">
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -38,6 +39,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ScrollActivity"
             android:label="@string/app_name"
@@ -48,15 +50,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.proteleprompter.MainActivity" />
         </activity>
+
         <activity
             android:name=".SettingActivity"
             android:label="@string/action_settings" />
+
         <activity
             android:name=".ColourSettingActivity"
             android:label="@string/action_colours_settings" />
 
         <provider
-            android:name=".ContentProvider.DocumentProvider"
+            android:name=".contentprovider.DocumentProvider"
             android:authorities="com.example.android.proteleprompter.app"
             android:enabled="true"
             android:exported="false" />

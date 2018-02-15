@@ -1,4 +1,4 @@
-package com.example.android.proteleprompter.Data;
+package com.example.android.proteleprompter.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,13 +6,13 @@ import android.os.Parcelable;
 
 public class Document implements Parcelable {
 
-    public String documentUri;
-    public String time;
+    private final String documentUri;
+    private final String time;
     public String title;
-    public String text;
-    public String documentType;
+    private final String text;
+    private final String documentType;
 
-    public Document(Parcel in) {
+    private Document(Parcel in) {
         documentUri = in.readString();
         time = in.readString();
         title = in.readString();

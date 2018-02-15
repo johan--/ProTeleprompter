@@ -1,4 +1,4 @@
-package com.example.android.proteleprompter.ContentProvider;
+package com.example.android.proteleprompter.contentprovider;
 
 
 import android.content.ContentResolver;
@@ -40,7 +40,7 @@ public class DocumentContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static String[] Columns = new String[]{_ID,
+        public static final String[] Columns = new String[]{_ID,
                 COLUMN_DOCUMENT_NAME,
                 COLUMN_DOCUMENT_TYPE,
                 COLUMN_DOCUMENT_LASTOPENTIME,

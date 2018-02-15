@@ -1,15 +1,11 @@
-package com.example.android.proteleprompter.Adaptor;
+package com.example.android.proteleprompter.adaptor;
 
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
-import android.os.Bundle;
-import android.os.Parcel;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,26 +15,25 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.android.proteleprompter.ContentProvider.DocumentContract;
-import com.example.android.proteleprompter.Data.Document;
+import com.example.android.proteleprompter.contentprovider.DocumentContract;
+import com.example.android.proteleprompter.data.Document;
 import com.example.android.proteleprompter.R;
-import com.example.android.proteleprompter.ScrollActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DocumentAdaptor extends CursorRecyclerViewAdapter {
 
-    public List<Document> mDocumentList = new ArrayList<>();
+    public final List<Document> mDocumentList = new ArrayList<>();
 
     private Document mDocument;
 
-    private Context mContext;
+    private final Context mContext;
 
     private OnEditOrDeleteFilesListener mListener;
 
-    public DocumentAdaptor(Context context, Cursor cursor) {
-        super(context, cursor);
+    public DocumentAdaptor(Context context) {
+        super(context, null);
         mContext = context;
     }
 
@@ -47,9 +42,8 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.item_document, parent, false);
-        final documentsListViewHolder vh = new documentsListViewHolder(view);
 
-        return vh;
+        return new documentsListViewHolder(view);
     }
 
     @Override
@@ -77,11 +71,11 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
 
     public class documentsListViewHolder extends RecyclerView.ViewHolder {
 
-        TextView fileTitle_tv;
-        TextView fileOpenTime_tv;
-        ImageView fileTypeImage_iv;
-        ImageButton editButton_ib;
-        ImageButton deleteButton_ib;
+        final TextView fileTitle_tv;
+        final TextView fileOpenTime_tv;
+        final ImageView fileTypeImage_iv;
+        final ImageButton editButton_ib;
+        final ImageButton deleteButton_ib;
 
         public documentsListViewHolder(View view) {
             super(view);

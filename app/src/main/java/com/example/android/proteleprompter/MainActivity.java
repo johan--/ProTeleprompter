@@ -14,10 +14,6 @@ import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.MenuBuilder;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,8 +22,8 @@ import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.support.v7.widget.Toolbar;
 
-import com.example.android.proteleprompter.ContentProvider.DocumentContract;
-import com.example.android.proteleprompter.Utilities.TeleprompterPreference;
+import com.example.android.proteleprompter.contentprovider.DocumentContract;
+import com.example.android.proteleprompter.utilities.TeleprompterPreference;
 import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
@@ -46,14 +42,12 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     private static final String TAG = MainActivity.class.getName();
     private MainFragment mFragment;
     private int mExtraFromWidget;
-    private Toolbar mToolbar;
 
     private static final int READ_REQUEST_CODE = 39;
 
     public static final int IMPORT_FILE_REQUEST_CODE = 8639;
 
     public static final String IMPORT_FILE_INTENT_NAME = "com.example.android.proteleprompter.importFileFromWidget";
-    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
 
         Intent mIntentFromWidgetAddList = getIntent();
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
+        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
@@ -80,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                 .replace(R.id.mainFragment_container, mFragment)
                 .commit();
 
-        mToolbar = findViewById(R.id.mainActivity_toolbar);
+        Toolbar mToolbar = findViewById(R.id.mainActivity_toolbar);
         setSupportActionBar(mToolbar);
         mToolbar.inflateMenu(R.menu.menu_main);
 
@@ -176,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     }
 
 
-    public void performFileSearch() {
+    private void performFileSearch() {
 
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 

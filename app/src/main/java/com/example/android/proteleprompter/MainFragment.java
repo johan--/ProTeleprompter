@@ -19,11 +19,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.example.android.proteleprompter.Adaptor.DocumentAdaptor;
-import com.example.android.proteleprompter.ContentProvider.DocumentContract;
-import com.example.android.proteleprompter.Data.Document;
+import com.example.android.proteleprompter.adaptor.DocumentAdaptor;
+import com.example.android.proteleprompter.contentprovider.DocumentContract;
+import com.example.android.proteleprompter.data.Document;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,17 +42,11 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private DocumentAdaptor mAdaptor;
-    public final int INIT_CURSOR_ID = 0;
+    private final int INIT_CURSOR_ID = 0;
 
     //private NewDocumentAdaptor mAdapter2;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
-
-    private List<Document> mDocumentList;
 
     private static final String TAG = "MainActivityFragment";
 
@@ -62,8 +55,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     private ConstraintLayout mReminderLayout;
 
     private final String BUNDLE_RECYCLE_LAYOUT = "recycler_view_bundle";
-
-    private LinearLayoutManager mLinearLayoutManager;
 
     public MainFragment() {
         // Required empty public constructor
@@ -91,9 +82,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mDocumentList = new ArrayList<>();
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            List<Document> mDocumentList = new ArrayList<>();
+            String mParam1 = getArguments().getString(ARG_PARAM1);
+            String mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
     }
@@ -127,9 +118,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     private void setUpListOfDocumentListView(RecyclerView documentListView) {
-        mLinearLayoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mAdaptor = new DocumentAdaptor(getActivity(), null);
+        mAdaptor = new DocumentAdaptor(getActivity());
         mAdaptor.setHasStableIds(true);
         documentListView.setAdapter(mAdaptor);
         documentListView.setLayoutManager(mLinearLayoutManager);
@@ -216,7 +207,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         }
     }
 
-    private Handler handlerToWait = new Handler();
+    private final Handler handlerToWait = new Handler();
 
     private void fillMx(Cursor data, MatrixCursor mx) {
         if (data == null)

@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'key0'
             keyPassword '19881226'
-            storeFile file('/Users/JC/Downloads/ProTeleprompterGithub/key')
+            storeFile file('$rootDir/key')
             storePassword '19881226'
         }
     }

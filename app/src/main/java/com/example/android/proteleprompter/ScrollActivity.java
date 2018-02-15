@@ -1,7 +1,5 @@
 package com.example.android.proteleprompter;
 
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -21,7 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.android.proteleprompter.ContentProvider.DocumentContract;
+import com.example.android.proteleprompter.contentprovider.DocumentContract;
 
 
 public class ScrollActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {

@@ -9,7 +9,6 @@
     android:padding="@dimen/widget_margin">
 
     <ImageView
-        android:id="@+id/widget_app_icon"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_gravity="center"
@@ -19,7 +18,6 @@
         android:contentDescription="@string/content_description_app_icon"/>
 
     <LinearLayout
-        android:id="@+id/file_text_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"

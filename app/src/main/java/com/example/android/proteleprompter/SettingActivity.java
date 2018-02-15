@@ -8,7 +8,6 @@ import android.view.MenuItem;
 
 public class SettingActivity extends AppCompatActivity {
 
-    private Toolbar mToolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,7 +17,7 @@ public class SettingActivity extends AppCompatActivity {
                 .replace(R.id.scroll_settings_fragment_container, fragment)
                 .commit();
 
-        mToolbar = findViewById(R.id.settingActivity_toolbar);
+        Toolbar mToolbar = findViewById(R.id.settingActivity_toolbar);
         mToolbar.setTitle(R.string.action_settings);
         setSupportActionBar(mToolbar);
 
