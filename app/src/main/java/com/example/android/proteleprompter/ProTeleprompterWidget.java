@@ -24,8 +24,6 @@ public class ProTeleprompterWidget extends AppWidgetProvider {
 
     private static String mRecentFileName;
 
-    private static final String ACTION_PROTELEPROMPTER = "PROTELEPROMPTER_WIDGET";
-
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
         Intent openActivityIntent, importFilesIntent;
@@ -68,8 +66,6 @@ public class ProTeleprompterWidget extends AppWidgetProvider {
             views.setOnClickPendingIntent(R.id.widget_layout, openActivityPendingIntent);
 
         } else {
-
-
 
             openActivityIntent = new Intent(context, ScrollActivity.class);
 

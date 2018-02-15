@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -54,11 +55,11 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     private List<Document> mDocumentList;
 
-    private TextView mTextView_listSubtitle;
-
     private static final String TAG = "MainActivityFragment";
 
     private RecyclerView mDocument_list_rv;
+
+    private ConstraintLayout mReminderLayout;
 
     private final String BUNDLE_RECYCLE_LAYOUT = "recycler_view_bundle";
 
@@ -106,6 +107,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
         mDocument_list_rv = root.findViewById(R.id.rv_list);
 
+        mReminderLayout = root.findViewById(R.id.no_file_reminder_layout);
 
         return root;
 
@@ -194,11 +196,17 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 ((DocumentAdaptor) mDocument_list_rv.getAdapter()).swapCursor(mx);
 
+                if(mx.getCount()>0){
+                    mReminderLayout.setVisibility(View.GONE);
+                }else{
+                    mReminderLayout.setVisibility(View.VISIBLE);
+                }
+
                 handlerToWait.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                     }
-                }, 2000);
+                }, 2000);//Need pending time for swap cursor and adapter, otherwise it doesn't work correctly
 
                 break;
             }

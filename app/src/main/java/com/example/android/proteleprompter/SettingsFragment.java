@@ -64,9 +64,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         /* Register the preference change listener */
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
-//        SharedPreferences colourPrefs = getActivity().getSharedPreferences("coloursPrefs", Context.MODE_PRIVATE);
-//        mFontColour = colourPrefs.getInt("fontColour", R.color.font_default_colour);
-//        mBackgroundColour = colourPrefs.getInt("backgroundColour", R.color.background_default_colour);
 
     }
 

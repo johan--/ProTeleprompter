@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -175,12 +176,14 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
         }
 
         private void setDocumentData(Cursor c) {
-            mDocument = new Document();
-            mDocument.title = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_NAME));
-            mDocument.documentType = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_TYPE));
-            mDocument.time = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_LASTOPENTIME));
-            mDocument.text = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_CONTENT));
-            mDocument.documentUri = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_URI));
+
+            String uri = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_URI));
+            String time = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_LASTOPENTIME));
+            String title = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_NAME));
+            String text = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_CONTENT));
+            String type = c.getString(c.getColumnIndex(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_TYPE));
+            mDocument = new Document(uri, time, title, text, type);
+
         }
     }
 
@@ -213,10 +216,7 @@ public class DocumentAdaptor extends CursorRecyclerViewAdapter {
                 selectedDocument.title = newName;
                 ContentValues fileValue = new ContentValues();
                 fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_NAME, newName);
-//                fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_TYPE, selectedDocument.documentType);
-//                fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_LASTOPENTIME, selectedDocument.time);
-//                fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_CONTENT, selectedDocument.text);
-//                fileValue.put(DocumentContract.DocumentEntry.COLUMN_DOCUMENT_URI, selectedDocument.documentUri);
+
 
                 String selection = DocumentContract.DocumentEntry._ID + " =?";
                 String[] selectionArgs = {id};

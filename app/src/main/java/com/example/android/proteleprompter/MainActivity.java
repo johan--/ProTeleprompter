@@ -14,12 +14,17 @@ import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuBuilder;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
+import android.support.v7.widget.Toolbar;
 
 import com.example.android.proteleprompter.ContentProvider.DocumentContract;
 import com.example.android.proteleprompter.Utilities.TeleprompterPreference;
@@ -41,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     private static final String TAG = MainActivity.class.getName();
     private MainFragment mFragment;
     private int mExtraFromWidget;
+    private Toolbar mToolbar;
 
     private static final int READ_REQUEST_CODE = 39;
 
@@ -74,6 +80,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                 .replace(R.id.mainFragment_container, mFragment)
                 .commit();
 
+        mToolbar = findViewById(R.id.mainActivity_toolbar);
+        setSupportActionBar(mToolbar);
+        mToolbar.inflateMenu(R.menu.menu_main);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -88,34 +97,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                 }
             }
         });
-//        FirebaseDynamicLinks.getInstance().getDynamicLink(getIntent())
-//                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
-//                    @Override
-//                    public void onSuccess(PendingDynamicLinkData data) {
-//                        if (data == null) {
-//                            Log.d(TAG, "getInvitation: no data");
-//                            return;
-//                        }
-//
-//                        // Get the deep link
-//                        Uri deepLink = data.getLink();
-//
-//                        // Extract invite
-//                        FirebaseAppInvite invite = FirebaseAppInvite.getInvitation(data);
-//                        if (invite != null) {
-//                            String invitationId = invite.getInvitationId();
-//                        }
-//
-//                        // Handle the deep link
-//                        // ...
-//                    }
-//                })
-//                .addOnFailureListener(this, new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.w(TAG, "getDynamicLink:onFailure", e);
-//                    }
-//                });
 
     }
 
@@ -157,7 +138,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -315,35 +297,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
             }
         }
         return builder.toString();
-    }
-
-    private String readTextFromRtfFile() {
-        String rtfText = "";
-
-
-        return rtfText;
-
-    }
-
-    private String readTextFromPdfFile(Uri pdfuri) {
-        String pdfText = "";
-
-        return pdfText;
-    }
-
-    private String readTextFromDocFile(Uri pdfuri) {
-
-
-        String docText = "";
-
-        return docText;
-
-    }
-
-    private String readTextFromPptFile() {
-        String pptText = "";
-
-        return pptText;
     }
 
     public void fileClick(View view) {

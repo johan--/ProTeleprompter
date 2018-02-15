@@ -9,6 +9,7 @@
     <dimen name="horizon_margin_to_right_edge">10dp</dimen>
     <dimen name="horizon_margin_between_two_icon">4dp</dimen>
 
+    <dimen name="horizon_margin_left_title">72dp</dimen>
     <dimen name="horizon_file_name_right_margin">16dp</dimen>
 
     <dimen name="list_height">72dp</dimen>

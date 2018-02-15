@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'key0'
+            keyPassword '19881226'
+            storeFile file('/Users/JC/Downloads/ProTeleprompterGithub/key')
+            storePassword '19881226'
+        }
+    }
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.example.android.proteleprompter"
@@ -20,12 +28,12 @@ android {
                 optimizeCode false
                 proguardFile 'proguard-rules.pro'
             }
+            signingConfig signingConfigs.config
         }
     }
     configurations.all {
         resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
     }
-
 }
 
 dependencies {
@@ -53,9 +61,7 @@ dependencies {
     compile('com.google.apis:google-api-services-drive:v3-rev99-1.23.0') {
         exclude group: 'org.apache.httpcomponents'
     }
-
     compile 'com.xw.repo:bubbleseekbar:3.14-lite'
-
 }
 
 

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ProTeleprompter</string>
     <string name="action_settings">Settings</string>
-    <string name="action_colours_settings">Colours Settings</string>
+    <string name="action_colours_settings">Colour Settings</string>
 
     <string name="error_message_loading_users">There seems to have been some error.</string>
     <string name="default_message_loading_users">Loading</string>
@@ -40,9 +40,9 @@
     <string name="pref_font_size_option_normal">Normal</string>
     <string name="pref_font_size_option_large">Large</string>
 
-    <string name="pref_font_size_value_small">20</string>
-    <string name="pref_font_size_value_normal">30</string>
-    <string name="pref_font_size_value_large">40</string>
+    <string name="pref_font_size_value_small">Small</string>
+    <string name="pref_font_size_value_normal">Normal</string>
+    <string name="pref_font_size_value_large">Large</string>
 
     <string name="pref_mirrorMode_title">Mirror mode</string>
     <string name="pref_mirrorMode_key">mirrorMode</string>
@@ -104,5 +104,13 @@
     <string name="invitation_message">I found a great teleprompter app and I would like to invite you to have a try!</string>
     <string name="invitation_cta">Download now!</string>
 
+    <string name="content_description_file_icon">File type icon</string>
+    <string name="content_description_rename_icon">Rename file</string>
+    <string name="content_description_delete_icon">Delete file</string>
+    <string name="content_description_app_icon">App icon</string>
+    <string name="content_description_widget_play_icon">Launch scrolling page</string>
+    <string name="content_description_widget_add_list_icon">Import new file</string>
+
+    <string name="no_file_text">No file</string>
 
 </resources>

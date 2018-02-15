@@ -173,7 +173,7 @@ public class ScrollActivityFragment extends Fragment implements GoogleApiClient.
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.menu_scroll, menu);
     }
 
     @Override
@@ -198,20 +198,8 @@ public class ScrollActivityFragment extends Fragment implements GoogleApiClient.
             Intent intent = new Intent(getActivity(), SettingActivity.class);
             startActivity(intent);
         }
-        if (id == R.id.action_share) {
-            sendInvitation();
-        }
-
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void sendInvitation() {
-        Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
-                .setMessage(getString(R.string.invitation_message))
-                .setCallToActionText(getString(R.string.invitation_cta))
-                .build();
-        startActivityForResult(intent, REQUEST_INVITE_CODE);
     }
 
 

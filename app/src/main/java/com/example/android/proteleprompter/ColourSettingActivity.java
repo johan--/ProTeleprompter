@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceManager;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.kizitonwose.colorpreference.ColorDialog;
@@ -33,6 +34,9 @@ public class ColourSettingActivity extends AppCompatActivity implements ColorDia
         getFragmentManager().beginTransaction()
                 .replace(R.id.scroll_colour_settings_fragment_container, mFragment)
                 .commit();
+
+        Toolbar toolbar = findViewById(R.id.colourSettingActivity_toolbar);
+        setSupportActionBar(toolbar);
 
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

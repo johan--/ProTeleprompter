@@ -2,7 +2,6 @@ package com.example.android.proteleprompter;
 
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -16,6 +15,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,12 +46,7 @@ public class ScrollActivity extends AppCompatActivity implements LoaderManager.L
 
         prefEditor.apply();
 
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, ProTeleprompterWidget.class));
-        //Trigger data update to handle widgets and force a data refresh
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.layout.proteleprompter_widget);
-        //Now update all widgets
-        ProTeleprompterWidget.updatePlantWidgets(this, appWidgetManager, appWidgetIds);
+        ProTeleprompterService.startUpdateWidget(this);
 
         getSupportLoaderManager().initLoader(SINGLE_LOADER_ID, null, this);
 
@@ -93,6 +88,9 @@ public class ScrollActivity extends AppCompatActivity implements LoaderManager.L
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data == null || data.getCount() < 1) return;
         data.moveToFirst();
+
+        Toolbar toolbar = findViewById(R.id.scrollActivity_toolbar);
+        setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
 

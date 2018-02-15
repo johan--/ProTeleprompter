@@ -2,11 +2,13 @@ package com.example.android.proteleprompter;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 
 public class SettingActivity extends AppCompatActivity {
 
+    private Toolbar mToolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,7 +18,11 @@ public class SettingActivity extends AppCompatActivity {
                 .replace(R.id.scroll_settings_fragment_container, fragment)
                 .commit();
 
-       this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mToolbar = findViewById(R.id.settingActivity_toolbar);
+        mToolbar.setTitle(R.string.action_settings);
+        setSupportActionBar(mToolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 

@@ -1,4 +1,4 @@
-package com.example.android.proteleprompter;
+package com.example.android.proteleprompter.Utilities;
 
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;

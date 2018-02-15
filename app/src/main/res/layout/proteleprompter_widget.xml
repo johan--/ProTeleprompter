@@ -15,7 +15,8 @@
         android:layout_gravity="center"
         android:layout_margin="16dp"
         android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher_round"/>
+        android:src="@mipmap/ic_launcher_round"
+        android:contentDescription="@string/content_description_app_icon"/>
 
     <LinearLayout
         android:id="@+id/file_text_layout"
@@ -58,7 +59,8 @@
         android:background="@android:color/transparent"
         android:padding="8dp"
         android:layout_gravity="center"
-        android:layout_margin="8dp" />
+        android:layout_margin="8dp"
+        android:contentDescription="@string/content_description_widget_play_icon"/>
 
     <ImageButton
         android:scaleType="fitCenter"
@@ -69,7 +71,8 @@
         android:src="@drawable/ic_playlist_add_white_24dp"
         android:background="@android:color/transparent"
         android:padding="8dp"
-        android:layout_margin="8dp" />
+        android:layout_margin="8dp"
+        android:contentDescription="@string/content_description_widget_add_list_icon"/>
 
 
 </LinearLayout>

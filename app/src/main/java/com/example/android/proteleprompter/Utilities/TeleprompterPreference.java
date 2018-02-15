@@ -21,15 +21,15 @@ public class TeleprompterPreference {
         String value = prefs.getString(keyForFont, defaultFont);
 
         switch (value) {
-            case "20": {
+            case "Small": {
                 fontSize = 20;
                 break;
             }
-            case "30": {
+            case "Normal": {
                 fontSize = 30;
                 break;
             }
-            case "40": {
+            case "Large": {
                 fontSize = 40;
                 break;
             }
