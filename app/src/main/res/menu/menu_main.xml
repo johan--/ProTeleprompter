@@ -10,12 +10,9 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_share"
+        android:id="@+id/action_abouts"
         android:orderInCategory="101"
-        android:title="@string/invitation_title"
-        android:icon="@drawable/ic_share_black_24px"
-        app:showAsAction="never"/>
-
-
-
+        android:title="@string/action_about"
+        android:icon="@drawable/ic_info_black_24px"
+        app:showAsAction="never" />
 </menu>

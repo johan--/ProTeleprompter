@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.proteleprompter.ScrollActivityFragment"
+    tools:context="com.jcMobile.android.proteleprompter.ScrollActivityFragment"
     tools:showIn="@layout/activity_scroll"
     android:id="@+id/scroll_layout">
 
@@ -58,7 +58,7 @@
             android:orientation="vertical">
 
 
-            <com.example.android.proteleprompter.utilities.CustomImagebutton
+            <com.jcMobile.android.proteleprompter.utilities.CustomImagebutton
                 android:id="@+id/ib_cameraSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

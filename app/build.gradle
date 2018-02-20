@@ -5,13 +5,13 @@ android {
         config {
             keyAlias 'key0'
             keyPassword '19881226'
-            storeFile file('$rootDir/key')
+            storeFile file('../key')
             storePassword '19881226'
         }
     }
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.example.android.proteleprompter"
+        applicationId "com.jcMobile.android.proteleprompter"
         minSdkVersion 16
         targetSdkVersion 26
         versionCode 1
@@ -61,8 +61,8 @@ dependencies {
     compile('com.google.apis:google-api-services-drive:v3-rev99-1.23.0') {
         exclude group: 'org.apache.httpcomponents'
     }
-    compile 'com.xw.repo:bubbleseekbar:3.14-lite'
 }
+
 
 
 apply plugin: 'com.google.gms.google-services'
